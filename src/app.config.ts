@@ -6,7 +6,12 @@ import Aura from '@primeng/themes/aura';
 import {providePrimeNG} from 'primeng/config';
 import {appRoutes} from './app.routes';
 import {definePreset} from '@primeng/themes';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
 
+import { environment } from './environments/environment';
 const MyPreset = definePreset(Aura, {
     semantic: {
         primary: {
@@ -30,6 +35,10 @@ export const appConfig: ApplicationConfig = {
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
         provideHttpClient(withFetch()),
         provideAnimationsAsync(),
-        providePrimeNG({ theme: { preset: MyPreset, options: { darkModeSelector: '.app-dark' } } })
+        providePrimeNG({ theme: { preset: MyPreset, options: { darkModeSelector: '.app-dark' } } }),
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideFirestore(() => getFirestore()),
+        provideStorage(() => getStorage())
     ]
 };
