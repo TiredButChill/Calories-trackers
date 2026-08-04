@@ -23,7 +23,7 @@
         "@primeng/themes": "^19.0.2",
         "chart.js": "^4.3.0",
         "chartjs-adapter-date-fns": "^3.0.0",
-        "firebase": "^12.17.0",
+        "firebase": "^11.10.0",
         "primeicons": "^7.0.0",
         "primeng": "^19.0.6",
         "quill": "^2.0.3",

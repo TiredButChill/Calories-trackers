@@ -1,0 +1,26 @@
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Mục tiêu hàng ngày</h1>
+
+<p-card styleClass="rounded-2xl shadow-sm">
+    <form [formGroup]="goalForm" (ngSubmit)="submit()" class="grid gap-4">
+        <label class="grid gap-1.5">
+            <span class="text-sm text-surface-500">Calories (kcal)</span>
+            <p-inputnumber formControlName="calories" [min]="0" class="w-full" />
+        </label>
+        <label class="grid gap-1.5">
+            <span class="text-sm text-surface-500">Đạm (g)</span>
+            <p-inputnumber formControlName="protein" [min]="0" class="w-full" />
+        </label>
+        <label class="grid gap-1.5">
+            <span class="text-sm text-surface-500">Béo (g)</span>
+            <p-inputnumber formControlName="fat" [min]="0" class="w-full" />
+        </label>
+        <label class="grid gap-1.5">
+            <span class="text-sm text-surface-500">Tinh bột (g)</span>
+            <p-inputnumber formControlName="carb" [min]="0" class="w-full" />
+        </label>
+        <p-button type="submit" label="Lưu mục tiêu" styleClass="w-full mt-2" [disabled]="goalForm.invalid" />
+        @if (saved()) {
+            <span class="text-green-500 text-sm text-center">Đã lưu!</span>
+        }
+    </form>
+</p-card>

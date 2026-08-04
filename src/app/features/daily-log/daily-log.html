@@ -1,0 +1,33 @@
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Nhật ký hôm nay</h1>
+
+@for (group of mealGroups((log$ | async)?.items); track group.meal) {
+    <div class="mb-4">
+        <div class="text-sm font-medium text-surface-500 mb-2">{{ group.label }}</div>
+        <div class="grid gap-2">
+            @for (item of group.items; track item.id) {
+                <p-card styleClass="rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="font-medium text-surface-900 dark:text-surface-0">{{ item.foodName }}</div>
+                            <div class="text-sm text-surface-500">{{ item.grams }}g · {{ item.calories }} kcal</div>
+                        </div>
+                        <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="remove(item.id!)" />
+                    </div>
+                </p-card>
+            } @empty {
+                <p class="text-surface-400 text-sm">Chưa có món nào</p>
+            }
+        </div>
+    </div>
+}
+
+<p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="openDialog()" />
+
+<p-dialog header="Thêm vào nhật ký" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '28rem' }">
+    <form [formGroup]="logForm" (ngSubmit)="submit()" class="grid gap-4">
+        <p-select formControlName="foodId" [options]="(foods$ | async) ?? []" optionLabel="name" optionValue="id" placeholder="Chọn món ăn" styleClass="w-full" />
+        <p-inputnumber formControlName="grams" placeholder="Số gram" [min]="0" class="w-full" />
+        <p-select formControlName="meal" [options]="mealTypes" optionLabel="label" optionValue="value" placeholder="Bữa ăn" styleClass="w-full" />
+        <p-button type="submit" label="Thêm" styleClass="w-full" [disabled]="logForm.invalid" />
+    </form>
+</p-dialog>

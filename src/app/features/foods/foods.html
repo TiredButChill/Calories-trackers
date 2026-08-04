@@ -1,0 +1,39 @@
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Món ăn</h1>
+
+<p-iconfield styleClass="w-full mb-4">
+    <p-inputicon class="pi pi-search" />
+    <input type="text" pInputText class="w-full" placeholder="Tìm món ăn..." [formControl]="search" />
+</p-iconfield>
+
+<div class="grid gap-2">
+    @for (food of foods$ | async; track food.id) {
+        <p-card styleClass="rounded-xl shadow-sm">
+            <div class="flex justify-between items-center">
+                <div>
+                    <div class="font-medium text-surface-900 dark:text-surface-0">{{ food.name }}</div>
+                    <div class="text-sm text-surface-500">{{ food.calories }} kcal / {{ food.servingSize }}g</div>
+                    <div class="text-xs text-surface-400">Đạm {{ food.protein }}g · Béo {{ food.fat }}g · Bột {{ food.carb }}g</div>
+                </div>
+                <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="remove(food.id!)" />
+            </div>
+        </p-card>
+    } @empty {
+        <p class="text-center text-surface-400 py-10">Chưa có món ăn nào</p>
+    }
+</div>
+
+<p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="showDialog.set(true)" />
+
+<p-dialog header="Thêm món ăn" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '28rem' }">
+    <form [formGroup]="foodForm" (ngSubmit)="submit()" class="grid gap-4">
+        <input pInputText formControlName="name" placeholder="Tên món ăn" class="w-full" />
+        <div class="grid grid-cols-2 gap-3">
+            <p-inputnumber formControlName="servingSize" placeholder="Khẩu phần (g)" [min]="0" class="w-full" />
+            <p-inputnumber formControlName="calories" placeholder="Calories" [min]="0" class="w-full" />
+            <p-inputnumber formControlName="protein" placeholder="Đạm (g)" [min]="0" class="w-full" />
+            <p-inputnumber formControlName="fat" placeholder="Béo (g)" [min]="0" class="w-full" />
+            <p-inputnumber formControlName="carb" placeholder="Tinh bột (g)" [min]="0" class="w-full" />
+        </div>
+        <p-button type="submit" label="Lưu" styleClass="w-full" [disabled]="foodForm.invalid" />
+    </form>
+</p-dialog>

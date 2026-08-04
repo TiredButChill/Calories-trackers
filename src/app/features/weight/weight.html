@@ -1,0 +1,27 @@
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Cân nặng</h1>
+
+<div class="grid gap-2">
+    @for (entry of entries$ | async; track entry.id) {
+        <p-card styleClass="rounded-xl shadow-sm">
+            <div class="flex justify-between items-center">
+                <div>
+                    <div class="font-medium text-surface-900 dark:text-surface-0">{{ entry.kg }} kg</div>
+                    <div class="text-sm text-surface-500">{{ entry.date }}</div>
+                </div>
+                <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="remove(entry.id!)" />
+            </div>
+        </p-card>
+    } @empty {
+        <p class="text-center text-surface-400 py-10">Chưa có dữ liệu cân nặng</p>
+    }
+</div>
+
+<p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="showDialog.set(true)" />
+
+<p-dialog header="Thêm cân nặng" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
+    <form [formGroup]="entryForm" (ngSubmit)="submit()" class="grid gap-4">
+        <input pInputText type="date" formControlName="date" class="w-full" />
+        <p-inputnumber formControlName="kg" placeholder="Cân nặng (kg)" [min]="0" [maxFractionDigits]="1" class="w-full" />
+        <p-button type="submit" label="Lưu" styleClass="w-full" [disabled]="entryForm.invalid" />
+    </form>
+</p-dialog>
