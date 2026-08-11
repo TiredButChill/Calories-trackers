@@ -175,7 +175,7 @@ import {InputOtpModule} from 'primeng/inputotp';
                     <p-listbox [(ngModel)]="listboxValue" [options]="listboxValues" optionLabel="name" [filter]="true" />
 
                     <div class="font-semibold text-xl">Select</div>
-                    <p-select [(ngModel)]="dropdownValue" [options]="dropdownValues" optionLabel="name" placeholder="Select" />
+                    <p-select appendTo="body" [(ngModel)]="dropdownValue" [options]="dropdownValues" optionLabel="name" placeholder="Select" />
 
                     <div class="font-semibold text-xl">MultiSelect</div>
                     <p-multiselect [options]="multiselectCountries" [(ngModel)]="multiselectSelectedCountries" placeholder="Select Countries" optionLabel="name" display="chip" [filter]="true">
@@ -204,7 +204,7 @@ import {InputOtpModule} from 'primeng/inputotp';
                     <p-togglebutton [(ngModel)]="toggleValue" onLabel="Yes" offLabel="No" styleClass="w-[10rem]" />
 
                     <div class="font-semibold text-xl">SelectButton</div>
-                    <p-selectbutton [(ngModel)]="selectButtonValue" [options]="selectButtonValues" optionLabel="name" />
+                    <p-select appendTo="body"button [(ngModel)]="selectButtonValue" [options]="selectButtonValues" optionLabel="name" />
                 </div>
 
                 <div class="card flex flex-col gap-4">

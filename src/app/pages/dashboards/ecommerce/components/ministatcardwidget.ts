@@ -19,7 +19,7 @@ import { MeterChart } from '@/pages/dashboards/charts/meterchart';
                             <span class="title-h7">{{ data.cardData.value }}</span>
                         </div>
                     </div>
-                    <p-select [(ngModel)]="selectedRange[idx]" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
+                    <p-select appendTo="body" [(ngModel)]="selectedRange[idx]" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
                 </div>
                 <meter-chart [show]="data.show" [currency]="data.currency" [meterOptionsProps]="meterOptionsProps(data, idx)" />
             </div>

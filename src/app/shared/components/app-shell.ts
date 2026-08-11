@@ -19,7 +19,8 @@ export class AppShell {
     { path: '/log', label: 'Nhật ký', icon: 'pi-book', exact: true },
     { path: '/foods', label: 'Món ăn', icon: 'pi-box', exact: true },
     { path: '/goals', label: 'Mục tiêu', icon: 'pi-flag', exact: true },
-    { path: '/weight', label: 'Cân nặng', icon: 'pi-chart-line', exact: true }
+    { path: '/weight', label: 'Cân nặng', icon: 'pi-chart-line', exact: true },
+    { path: '/workout', label: 'Tập luyện', icon: 'pi-bolt', exact: false }
   ];
 
   async logout(): Promise<void> {

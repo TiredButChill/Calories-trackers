@@ -20,7 +20,7 @@ import { FormsModule } from '@angular/forms';
                         <p-tag [severity]="data.cardData.positive ? 'success' : 'danger'" [value]="data.cardData.percent + '%'" />
                     </div>
                 </div>
-                <p-select [(ngModel)]="selectedRange[idx]" [options]="ranges" optionLabel="name" placeholder="Select a Month" class="w-24" />
+                <p-select appendTo="body" [(ngModel)]="selectedRange[idx]" [options]="ranges" optionLabel="name" placeholder="Select a Month" class="w-24" />
             </div>
             <line-chart [datasets]="data.datasets" [bgColor]="bgColor(data)" [borderColor]="borderColor(data)" [option]="option(idx)" tooltipPrefix="$" class="!max-h-40" />
         </div>

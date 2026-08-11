@@ -38,7 +38,7 @@ import { SelectModule } from 'primeng/select';
                         </div>
                         <div class="col-span-12 mb-6">
                             <span class="text-surface-900 dark:text-surface-0 text-2xl block font-medium mb-8">Shipping</span>
-                            <p-select [options]="cities" [(ngModel)]="selectedCity" placeholder="Country / City" optionLabel="name" [showClear]="true" styleClass="w-full"></p-select>
+                            <p-select appendTo="body" [options]="cities" [(ngModel)]="selectedCity" placeholder="Country / City" optionLabel="name" [showClear]="true" styleClass="w-full"></p-select>
                         </div>
                         <div class="col-span-12 lg:col-span-6 mb-6">
                             <input id="name" placeholder="Name" type="text" class="p-inputtext w-full" />

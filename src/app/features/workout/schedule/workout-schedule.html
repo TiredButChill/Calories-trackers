@@ -1,0 +1,31 @@
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Lịch tập</h1>
+
+@if (schedule$ | async; as schedule) {
+    <div class="grid gap-2">
+        @for (day of days; track day.value) {
+            <p-card styleClass="rounded-xl shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-16 font-medium text-surface-900 dark:text-surface-0">{{ day.label }}</div>
+                    <p-select appendTo="body"
+                        class="flex-1"
+                        styleClass="w-full"
+                        [options]="(templateOptions$ | async) ?? []"
+                        optionLabel="label"
+                        optionValue="value"
+                        [ngModel]="schedule[day.value]"
+                        (ngModelChange)="assignDay(day.value, $event)"
+                    />
+                    <p-select appendTo="body"
+                        styleClass="w-32"
+                        [options]="copySourceOptions(day.value)"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Sao chép..."
+                        [ngModel]="null"
+                        (ngModelChange)="copyDay($event, day.value)"
+                    />
+                </div>
+            </p-card>
+        }
+    </div>
+}

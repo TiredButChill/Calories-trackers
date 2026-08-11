@@ -10,7 +10,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     imports: [FormsModule, MultiLineChart, SelectButtonModule],
     template: ` <div class="flex flex-col md:flex-row gap-4 md:gap-0 items-start justify-between mb-4">
             <div class="label-medium">Income and Expenditure</div>
-            <p-select-button [(ngModel)]="select" [options]="options" optionLabel="name" ariaLabelledBy="basic" [allowEmpty]="false" />
+            <p-select appendTo="body"-button [(ngModel)]="select" [options]="options" optionLabel="name" ariaLabelledBy="basic" [allowEmpty]="false" />
         </div>
         <div class="flex-1 w-full overflow-auto">
             <multi-line-chart [datasets]="randomData" [labels]="labels" [bgColors]="bgColors" [borderColors]="borderColors" [option]="select.value" />

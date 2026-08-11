@@ -69,7 +69,7 @@ import { ButtonModule } from 'primeng/button';
             <h2 class="title-h7 text-left">Quick Withdraw</h2>
             <div class="flex flex-col gap-3.5 mt-7 mb-6">
                 <input pInputText type="text" [(ngModel)]="amountValue" placeholder="Amount" />
-                <p-select [(ngModel)]="selectedCard" [options]="cards" optionLabel="label" placeholder="Select a Card" class="w-full" />
+                <p-select appendTo="body" [(ngModel)]="selectedCard" [options]="cards" optionLabel="label" placeholder="Select a Card" class="w-full" />
             </div>
             <button pButton label="Confirm" severity="success" class="!w-full"></button>
         </div>

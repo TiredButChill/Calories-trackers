@@ -20,8 +20,14 @@
 
 <p-dialog header="Thêm cân nặng" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
     <form [formGroup]="entryForm" (ngSubmit)="submit()" class="grid gap-4">
-        <input pInputText type="date" formControlName="date" class="w-full" />
-        <p-inputnumber formControlName="kg" placeholder="Cân nặng (kg)" [min]="0" [maxFractionDigits]="1" class="w-full" />
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Ngày</label>
+            <input pInputText type="date" formControlName="date" class="w-full" />
+        </div>
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Cân nặng (kg)</label>
+            <p-inputnumber formControlName="kg" placeholder="Cân nặng (kg)" [min]="0" [maxFractionDigits]="1" styleClass="w-full" inputStyleClass="w-full" />
+        </div>
         <p-button type="submit" label="Lưu" styleClass="w-full" [disabled]="entryForm.invalid" />
     </form>
 </p-dialog>

@@ -22,18 +22,53 @@
     }
 </div>
 
+<p-button icon="pi pi-upload" [rounded]="true" severity="secondary" styleClass="!fixed right-4 bottom-44 !w-12 !h-12 shadow-lg z-10" (onClick)="openBulkDialog()" />
 <p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="showDialog.set(true)" />
 
 <p-dialog header="Thêm món ăn" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '28rem' }">
     <form [formGroup]="foodForm" (ngSubmit)="submit()" class="grid gap-4">
-        <input pInputText formControlName="name" placeholder="Tên món ăn" class="w-full" />
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Tên món ăn</label>
+            <input pInputText formControlName="name" placeholder="Tên món ăn" class="w-full" />
+        </div>
         <div class="grid grid-cols-2 gap-3">
-            <p-inputnumber formControlName="servingSize" placeholder="Khẩu phần (g)" [min]="0" class="w-full" />
-            <p-inputnumber formControlName="calories" placeholder="Calories" [min]="0" class="w-full" />
-            <p-inputnumber formControlName="protein" placeholder="Đạm (g)" [min]="0" class="w-full" />
-            <p-inputnumber formControlName="fat" placeholder="Béo (g)" [min]="0" class="w-full" />
-            <p-inputnumber formControlName="carb" placeholder="Tinh bột (g)" [min]="0" class="w-full" />
+            <div class="grid gap-1 min-w-0">
+                <label class="text-xs font-medium text-surface-500">Khẩu phần (g)</label>
+                <p-inputnumber formControlName="servingSize" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+            </div>
+            <div class="grid gap-1 min-w-0">
+                <label class="text-xs font-medium text-surface-500">Calories</label>
+                <p-inputnumber formControlName="calories" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+            </div>
+            <div class="grid gap-1 min-w-0">
+                <label class="text-xs font-medium text-surface-500">Đạm (g)</label>
+                <p-inputnumber formControlName="protein" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+            </div>
+            <div class="grid gap-1 min-w-0">
+                <label class="text-xs font-medium text-surface-500">Béo (g)</label>
+                <p-inputnumber formControlName="fat" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+            </div>
+            <div class="grid gap-1 min-w-0">
+                <label class="text-xs font-medium text-surface-500">Tinh bột (g)</label>
+                <p-inputnumber formControlName="carb" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+            </div>
         </div>
         <p-button type="submit" label="Lưu" styleClass="w-full" [disabled]="foodForm.invalid" />
     </form>
+</p-dialog>
+
+<p-dialog header="Nhập hàng loạt món ăn" [visible]="showBulkDialog()" (visibleChange)="showBulkDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '32rem' }">
+    <div class="grid gap-3">
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Dữ liệu JSON (mảng món ăn, cần ít nhất "name" và "calories" — các trường khác mặc định là 0)</label>
+            <textarea pTextarea [formControl]="bulkText" rows="10" class="w-full font-mono text-xs" [placeholder]="bulkImportExample"></textarea>
+        </div>
+        @if (bulkError()) {
+            <p class="text-sm text-red-500">{{ bulkError() }}</p>
+        }
+        @if (bulkSuccess()) {
+            <p class="text-sm text-green-600">{{ bulkSuccess() }}</p>
+        }
+        <p-button label="Nhập" [loading]="bulkImporting()" styleClass="w-full" [disabled]="bulkText.invalid" (onClick)="submitBulk()" />
+    </div>
 </p-dialog>

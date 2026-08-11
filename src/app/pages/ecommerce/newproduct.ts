@@ -134,7 +134,7 @@ interface Image {
                     <div class="border border-surface-200 dark:border-surface-700 rounded">
                         <span class="text-surface-900 dark:text-surface-0 font-bold block border-b border-surface-200 dark:border-surface-700 p-4">Category</span>
                         <div class="p-4">
-                            <p-select [options]="categoryOptions" [(ngModel)]="product.category" placeholder="Select a category"></p-select>
+                            <p-select appendTo="body" [options]="categoryOptions" [(ngModel)]="product.category" placeholder="Select a category"></p-select>
                         </div>
                     </div>
 

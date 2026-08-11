@@ -12,7 +12,7 @@ import { DividerModule } from 'primeng/divider';
     template: `<div class="p-6">
             <div class="mb-6 flex items-center justify-between gap-6">
                 <div class="label-medium">Spending Limit</div>
-                <p-select [(ngModel)]="selectedMonth1" [options]="months" optionLabel="name" placeholder="Select a Month" class="w-24" />
+                <p-select appendTo="body" [(ngModel)]="selectedMonth1" [options]="months" optionLabel="name" placeholder="Select a Month" class="w-24" />
             </div>
             <custom-meter title="Monthly spending limit" [value]="meterValue1" />
         </div>
@@ -20,7 +20,7 @@ import { DividerModule } from 'primeng/divider';
         <div class="p-6">
             <div class="mb-6 flex items-center justify-between gap-6">
                 <div class="label-medium">Expenditure</div>
-                <p-select [(ngModel)]="selectedMonth2" [options]="months" optionLabel="name" placeholder="Select a Month" class="w-24" />
+                <p-select appendTo="body" [(ngModel)]="selectedMonth2" [options]="months" optionLabel="name" placeholder="Select a Month" class="w-24" />
             </div>
             <custom-meter [value]="meterValue2" />
             <p-button styleClass="w-full mt-6 !text-surface-950 dark:!text-surface-0 !rounded-lg" label="View account detail" outlined severity="secondary" />

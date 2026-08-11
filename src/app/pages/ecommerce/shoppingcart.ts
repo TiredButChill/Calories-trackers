@@ -25,7 +25,7 @@ import { SelectModule } from 'primeng/select';
                             </div>
                             <div class="w-full sm:w-6/12 flex items-start justify-between mt-4 sm:mt-0">
                                 <div>
-                                    <p-select [options]="quantityOptions"></p-select>
+                                    <p-select appendTo="body" [options]="quantityOptions"></p-select>
                                 </div>
                                 <div class="flex flex-col sm:items-end">
                                     <span class="text-surface-900 dark:text-surface-0 text-xl font-medium mb-2 sm:mb-4">$20.00</span>
@@ -62,7 +62,7 @@ import { SelectModule } from 'primeng/select';
                             </div>
                             <div class="w-full sm:w-6/12 flex items-start justify-between mt-4 sm:mt-0">
                                 <div>
-                                    <p-select [options]="quantityOptions"></p-select>
+                                    <p-select appendTo="body" [options]="quantityOptions"></p-select>
                                 </div>
                                 <div class="flex flex-col sm:items-end">
                                     <span class="text-surface-900 dark:text-surface-0 text-xl font-medium mb-2 sm:mb-4">$62.00</span>

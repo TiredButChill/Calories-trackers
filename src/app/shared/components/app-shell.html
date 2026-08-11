@@ -9,7 +9,7 @@
     </main>
 
     <nav class="fixed bottom-0 inset-x-0 z-20 bg-surface-0 dark:bg-surface-900 border-t border-surface-200 dark:border-surface-800 pb-[env(safe-area-inset-bottom)]">
-        <div class="max-w-xl mx-auto grid grid-cols-5">
+        <div class="max-w-xl mx-auto grid grid-cols-6">
             @for (item of navItems; track item.path) {
                 <a
                     [routerLink]="item.path"

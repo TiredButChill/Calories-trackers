@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
                 <h3 class="label-medium">{{ dataset.cardData.title }}</h3>
                 <span class="body-xsmall">{{ dataset.cardData.description }}</span>
             </div>
-            <p-select [(ngModel)]="selectedRange" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
+            <p-select appendTo="body" [(ngModel)]="selectedRange" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
         </div>
         <div class="w-full flex-1 overflow-auto">
             <multi-line-chart [datasets]="dataset.datasets" [bgColors]="dataset.bgColors" [borderColors]="dataset.borderColors" [option]="selectedRange.unit" class="!max-h-80 h-full w-full cursor-pointer" />

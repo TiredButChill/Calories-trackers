@@ -39,7 +39,7 @@ import { RippleModule } from 'primeng/ripple';
                     </div>
                     <div class="mb-6 col-span-12 md:col-span-6">
                         <label for="country" class="font-medium text-surface-900 dark:text-surface-0 mb-2 block"> Country </label>
-                        <p-select inputId="country" [options]="countries" optionLabel="name" fluid [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
+                        <p-select appendTo="body" inputId="country" [options]="countries" optionLabel="name" fluid [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
                             <ng-template let-country #item>
                                 <div class="flex items-center">
                                     <img src="https://primefaces.org/cdn/v2/images/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + country.code.toLowerCase()" style="width:18px" />

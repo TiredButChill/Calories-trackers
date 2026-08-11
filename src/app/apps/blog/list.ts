@@ -14,7 +14,7 @@ import { AvatarModule } from 'primeng/avatar';
                 <ng-template #header>
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <span class="text-xl text-surface-900 dark:text-surface-0 font-semibold">Articles</span>
-                        <p-select [(ngModel)]="sortKey" [options]="sortOptions" optionLabel="label" optionValue="value" placeholder="Sort By" class="w-full md:w-60" (onChange)="onSortChange($event)" />
+                        <p-select appendTo="body" [(ngModel)]="sortKey" [options]="sortOptions" optionLabel="label" optionValue="value" placeholder="Sort By" class="w-full md:w-60" (onChange)="onSortChange($event)" />
                     </div>
                 </ng-template>
                 <ng-template #grid let-items>

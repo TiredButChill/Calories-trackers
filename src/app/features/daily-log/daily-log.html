@@ -25,9 +25,18 @@
 
 <p-dialog header="Thêm vào nhật ký" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '28rem' }">
     <form [formGroup]="logForm" (ngSubmit)="submit()" class="grid gap-4">
-        <p-select formControlName="foodId" [options]="(foods$ | async) ?? []" optionLabel="name" optionValue="id" placeholder="Chọn món ăn" styleClass="w-full" />
-        <p-inputnumber formControlName="grams" placeholder="Số gram" [min]="0" class="w-full" />
-        <p-select formControlName="meal" [options]="mealTypes" optionLabel="label" optionValue="value" placeholder="Bữa ăn" styleClass="w-full" />
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Món ăn</label>
+            <p-select appendTo="body" formControlName="foodId" [options]="(foods$ | async) ?? []" optionLabel="name" optionValue="id" placeholder="Chọn món ăn" styleClass="w-full" [filter]="true" filterBy="name" />
+        </div>
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Số gram</label>
+            <p-inputnumber formControlName="grams" placeholder="Số gram" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+        </div>
+        <div class="grid gap-1">
+            <label class="text-xs font-medium text-surface-500">Bữa ăn</label>
+            <p-select appendTo="body" formControlName="meal" [options]="mealTypes" optionLabel="label" optionValue="value" placeholder="Bữa ăn" styleClass="w-full" />
+        </div>
         <p-button type="submit" label="Thêm" styleClass="w-full" [disabled]="logForm.invalid" />
     </form>
 </p-dialog>

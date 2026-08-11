@@ -14,7 +14,7 @@ import { generateRandomMultiData } from '@/lib/utils';
                 <h3 class="label-medium">E-Commerce Overview</h3>
                 <span class="body-xsmall">Trends summary, performance analysis </span>
             </div>
-            <p-select [(ngModel)]="selectedRange" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
+            <p-select appendTo="body" [(ngModel)]="selectedRange" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
         </div>
         <div class="flex-1 w-full h-full overflow-hidden">
             <bar-chart [labels]="labels" [datasets]="randomData" [bgColors]="bgColors" [option]="selectedRange.unit" class="min-w-[640px] flex-1 h-full w-full cursor-pointer" />

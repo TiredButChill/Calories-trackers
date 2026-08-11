@@ -19,7 +19,7 @@ import { Product, ProductService } from '@/pages/service/product.service';
             <p-dataview [value]="products" [layout]="layout">
                 <ng-template #header>
                     <div class="flex justify-end">
-                        <p-select-button [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+                        <p-select appendTo="body"-button [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
                             <ng-template #item let-option>
                                 <i
                                     class="pi "

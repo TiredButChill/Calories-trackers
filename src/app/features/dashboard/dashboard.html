@@ -33,3 +33,26 @@
         }
     </div>
 }
+
+<a routerLink="/workout/today" class="block mt-4">
+    <p-card styleClass="rounded-2xl shadow-sm">
+        @if (todayWorkout$ | async; as workout) {
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-surface-500 text-sm">Tập luyện hôm nay</div>
+                    <div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ workout.templateName }}</div>
+                    <div class="text-surface-400 text-xs mt-1">{{ sessionSetCount(workout) }} sets · {{ sessionVolume(workout) }} kg</div>
+                </div>
+                <p-tag [value]="statusLabels[workout.status]" [severity]="workout.status === 'completed' ? 'success' : workout.status === 'in_progress' ? 'warn' : 'secondary'" />
+            </div>
+        } @else if (todayWorkoutError()) {
+            <div class="flex items-center justify-between">
+                <div class="text-red-500 text-sm">⚠️ {{ todayWorkoutError() }}</div>
+            </div>
+        } @else {
+            <div class="flex items-center justify-between">
+                <div class="text-surface-500 text-sm">🧘 Hôm nay là ngày nghỉ</div>
+            </div>
+        }
+    </p-card>
+</a>

@@ -122,7 +122,7 @@ interface expandedRows {
                                 Status
                                 <p-columnFilter field="status" matchMode="equals" display="menu">
                                     <ng-template #filter let-value let-filter="filterCallback">
-                                        <p-select [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any" [style]="{ 'min-width': '12rem' }">
+                                        <p-select appendTo="body" [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any" [style]="{ 'min-width': '12rem' }">
                                             <ng-template let-option #item>
                                                 <span [class]="'customer-badge status-' + option.value">{{ option.label }}</span>
                                             </ng-template>

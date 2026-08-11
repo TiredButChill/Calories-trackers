@@ -3,3 +3,7 @@ export * from './daily-log.model';
 export * from './goal.model';
 export * from './weight.model';
 export * from './user.model';
+export * from './exercise.model';
+export * from './workout-template.model';
+export * from './workout-schedule.model';
+export * from './workout-session.model';

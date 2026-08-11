@@ -1,0 +1,39 @@
+@if (session$ | async; as session) {
+    <div class="flex items-center gap-2 mb-4">
+        <a routerLink="/workout/history" class="text-surface-500"><i class="pi pi-arrow-left"></i></a>
+        <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 flex-1">{{ session.templateName }}</h1>
+        <p-tag value="Hoàn thành" severity="success" />
+    </div>
+    <div class="text-sm text-surface-500 mb-4">{{ session.date }}</div>
+
+    <p-card styleClass="rounded-xl shadow-sm mb-4">
+        <div class="grid grid-cols-4 gap-2 text-center">
+            <div><div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ sessionSetCount(session) }}</div><div class="text-xs text-surface-500">Sets</div></div>
+            <div><div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ sessionRepCount(session) }}</div><div class="text-xs text-surface-500">Reps</div></div>
+            <div><div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ sessionVolume(session) }} kg</div><div class="text-xs text-surface-500">Volume</div></div>
+            <div><div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ formatDuration(session.durationSeconds) }}</div><div class="text-xs text-surface-500">Thời gian</div></div>
+        </div>
+    </p-card>
+
+    <div class="grid gap-2">
+        @for (exercise of session.exercises; track exercise.id) {
+            <p-card styleClass="rounded-xl shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="font-medium text-surface-900 dark:text-surface-0">{{ exercise.exerciseName }}</div>
+                    <div class="text-xs text-surface-400">{{ totalSetCount(exercise.sets) }} sets · {{ exerciseVolume(exercise) }} kg</div>
+                </div>
+                <div class="grid gap-1">
+                    @for (set of exercise.sets; track set.setNumber) {
+                        <div class="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-300">
+                            <span class="w-5 text-xs text-surface-400">{{ set.setNumber }}</span>
+                            <span>{{ set.weight }} kg × {{ set.reps }}</span>
+                            @if (set.isWarmup) {
+                                <span class="text-xs text-surface-400">(khởi động)</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </p-card>
+        }
+    </div>
+}

@@ -1,5 +1,5 @@
 {
-    "name": "diamond-ng",
+    "name": "calories-tracker",
     "version": "19.0.0",
     "scripts": {
         "ng": "ng",
@@ -24,6 +24,7 @@
         "chart.js": "^4.3.0",
         "chartjs-adapter-date-fns": "^3.0.0",
         "firebase": "^11.10.0",
+        "json5": "^2.2.3",
         "primeicons": "^7.0.0",
         "primeng": "^19.0.6",
         "quill": "^2.0.3",

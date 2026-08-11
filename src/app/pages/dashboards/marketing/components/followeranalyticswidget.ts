@@ -48,7 +48,7 @@ import { CustomMeter } from '@/pages/dashboards/charts/custommeter';
                         <span class="body-xsmall">UI Library</span>
                     </div>
                 </div>
-                <p-select [(ngModel)]="selectedRange" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
+                <p-select appendTo="body" [(ngModel)]="selectedRange" [options]="ranges" optionLabel="name" placeholder="Select a Month" styleClass="w-24" />
             </div>
             <div>
                 <div class="flex items-center gap-3.5">

@@ -86,23 +86,23 @@ declare type SurfacesType = {
                 <div>
                     <div class="flex flex-col gap-2">
                         <span class="text-lg text-muted-color font-semibold">Presets</span>
-                        <p-selectbutton [options]="presets" [ngModel]="selectedPreset()" (ngModelChange)="onPresetChange($event)" [allowEmpty]="false"></p-selectbutton>
+                        <p-select appendTo="body"button [options]="presets" [ngModel]="selectedPreset()" (ngModelChange)="onPresetChange($event)" [allowEmpty]="false"></p-selectbutton>
                     </div>
                 </div>
                 <div>
                     <div class="flex flex-col gap-2">
                         <span class="text-lg text-muted-color font-semibold">Color Scheme</span>
-                        <p-selectbutton [ngModel]="darkTheme()" (ngModelChange)="toggleDarkMode()" [options]="themeOptions" optionLabel="name" optionValue="value" [allowEmpty]="false"></p-selectbutton>
+                        <p-select appendTo="body"button [ngModel]="darkTheme()" (ngModelChange)="toggleDarkMode()" [options]="themeOptions" optionLabel="name" optionValue="value" [allowEmpty]="false"></p-selectbutton>
                     </div>
                 </div>
                 <div *ngIf="!simple && location === 'app'" class="flex flex-col gap-2">
                     <span class="text-lg text-muted-color font-semibold">Card Style</span>
-                    <p-selectbutton [ngModel]="cardStyle()" (ngModelChange)="onCardStyleChange($event)" [options]="cardStyleOptions" optionLabel="name" optionValue="value" [allowEmpty]="false" [allowEmpty]="false" />
+                    <p-select appendTo="body"button [ngModel]="cardStyle()" (ngModelChange)="onCardStyleChange($event)" [options]="cardStyleOptions" optionLabel="name" optionValue="value" [allowEmpty]="false" [allowEmpty]="false" />
                 </div>
 
                 <div *ngIf="!simple && location === 'app'" class="flex flex-col gap-2">
                     <span class="text-lg text-muted-color font-semibold">Menu Theme</span>
-                    <p-selectbutton [ngModel]="menuTheme()" (ngModelChange)="onMenuThemeChange($event)" [options]="menuThemeOptions" optionLabel="name" optionValue="value" [allowEmpty]="false" [allowEmpty]="false" />
+                    <p-select appendTo="body"button [ngModel]="menuTheme()" (ngModelChange)="onMenuThemeChange($event)" [options]="menuThemeOptions" optionLabel="name" optionValue="value" [allowEmpty]="false" [allowEmpty]="false" />
                 </div>
 
                 <div *ngIf="!simple && location === 'app'">
