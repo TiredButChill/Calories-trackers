@@ -20,3 +20,8 @@ export function startOfWeek(date: Date = new Date()): Date {
   result.setDate(result.getDate() - isoDayIndex);
   return result;
 }
+
+export function weekStartKey(date: string): string {
+  const [year, month, day] = date.split('-').map(Number);
+  return toDateKey(startOfWeek(new Date(year, month - 1, day)));
+}

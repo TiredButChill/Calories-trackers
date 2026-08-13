@@ -1,4 +1,4 @@
-<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Cân nặng</h1>
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'weight.title' | t }}</h1>
 
 <div class="grid gap-2">
     @for (entry of entries$ | async; track entry.id) {
@@ -12,22 +12,22 @@
             </div>
         </p-card>
     } @empty {
-        <p class="text-center text-surface-400 py-10">Chưa có dữ liệu cân nặng</p>
+        <p class="text-center text-surface-400 py-10">{{ 'weight.emptyState' | t }}</p>
     }
 </div>
 
 <p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="showDialog.set(true)" />
 
-<p-dialog header="Thêm cân nặng" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
+<p-dialog [header]="'weight.addDialogHeader' | t" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
     <form [formGroup]="entryForm" (ngSubmit)="submit()" class="grid gap-4">
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Ngày</label>
+            <label class="text-xs font-medium text-surface-500">{{ 'weight.dateLabel' | t }}</label>
             <input pInputText type="date" formControlName="date" class="w-full" />
         </div>
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Cân nặng (kg)</label>
-            <p-inputnumber formControlName="kg" placeholder="Cân nặng (kg)" [min]="0" [maxFractionDigits]="1" styleClass="w-full" inputStyleClass="w-full" />
+            <label class="text-xs font-medium text-surface-500">{{ 'weight.weightLabel' | t }}</label>
+            <p-inputnumber formControlName="kg" [placeholder]="'weight.weightPlaceholder' | t" [min]="0" [maxFractionDigits]="1" styleClass="w-full" inputStyleClass="w-full" />
         </div>
-        <p-button type="submit" label="Lưu" styleClass="w-full" [disabled]="entryForm.invalid" />
+        <p-button type="submit" [label]="'weight.saveButton' | t" styleClass="w-full" [disabled]="entryForm.invalid" />
     </form>
 </p-dialog>

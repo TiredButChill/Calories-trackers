@@ -1,0 +1,12 @@
+{
+  "title": "Hôm nay",
+  "calories": "Calories",
+  "remaining": "Còn lại ",
+  "over": "Vượt ",
+  "protein": "Đạm",
+  "fat": "Béo",
+  "carb": "Tinh bột",
+  "todayWorkout": "Tập luyện hôm nay",
+  "restDay": "🧘 Hôm nay là ngày nghỉ",
+  "loadError": "Không tải được dữ liệu tập luyện hôm nay."
+}

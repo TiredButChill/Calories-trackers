@@ -1,0 +1,13 @@
+{
+  "title": "Settings",
+  "theme": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "language": "Language",
+  "languageVi": "Vietnamese",
+  "languageEn": "English",
+  "fontSize": "Font size",
+  "fontSizeSm": "Small",
+  "fontSizeMd": "Medium",
+  "fontSizeLg": "Large"
+}

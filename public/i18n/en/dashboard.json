@@ -1,0 +1,12 @@
+{
+  "title": "Today",
+  "calories": "Calories",
+  "remaining": "Remaining ",
+  "over": "Over ",
+  "protein": "Protein",
+  "fat": "Fat",
+  "carb": "Carbs",
+  "todayWorkout": "Today's workout",
+  "restDay": "🧘 Today is a rest day",
+  "loadError": "Couldn't load today's workout data."
+}

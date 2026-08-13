@@ -1,11 +1,14 @@
 import { Injectable, Injector, inject, runInInjectionContext } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, doc, docData, limit, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
-import { Observable, combineLatest, firstValueFrom, map, switchMap } from 'rxjs';
+import { Observable, combineLatest, firstValueFrom, map, of, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
+import { ScheduleOverrideService } from './schedule-override.service';
 import { WorkoutScheduleService } from './workout-schedule.service';
+import { WorkoutTemplateService } from './workout-template.service';
 import { WorkoutSession, WorkoutSet, WorkoutTemplate } from '../models';
-import { dayOfWeekFromDate, toDateKey } from '../../shared/utils/date.util';
+import { dayOfWeekFromDate, toDateKey, weekStartKey } from '../../shared/utils/date.util';
+import { applyScheduleOverride } from '../../shared/utils/schedule-override.util';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutSessionService {
@@ -14,6 +17,8 @@ export class WorkoutSessionService {
   private readonly authService = inject(AuthService);
   private readonly injector = inject(Injector);
   private readonly workoutScheduleService = inject(WorkoutScheduleService);
+  private readonly workoutTemplateService = inject(WorkoutTemplateService);
+  private readonly scheduleOverrideService = inject(ScheduleOverrideService);
 
   getByDate(date: string): Observable<WorkoutSession | null> {
     const dayOfWeek = dayOfWeekFromDate(date);
@@ -25,8 +30,23 @@ export class WorkoutSessionService {
         const sessionDoc = doc(this.firestore, 'users', currentUser.uid, 'workoutSessions', date);
         return combineLatest([
           runInInjectionContext(this.injector, () => docData(sessionDoc)),
-          this.workoutScheduleService.getTemplateForDay(dayOfWeek)
-        ]).pipe(map(([data, template]) => (data as WorkoutSession) ?? this.buildPlannedSession(date, dayOfWeek, template)));
+          this.workoutScheduleService.getSchedule(),
+          this.scheduleOverrideService.getOverride(weekStartKey(date))
+        ]).pipe(
+          switchMap(([data, schedule, override]) => {
+            if (data) {
+              return of(data as WorkoutSession);
+            }
+            const effectiveSchedule = applyScheduleOverride(schedule, override);
+            const templateId = effectiveSchedule[dayOfWeek];
+            if (!templateId) {
+              return of(null);
+            }
+            return this.workoutTemplateService
+              .getTemplate(templateId)
+              .pipe(map((template) => this.buildPlannedSession(date, dayOfWeek, template ?? null)));
+          })
+        );
       })
     );
   }
@@ -93,6 +113,20 @@ export class WorkoutSessionService {
       exercises: current.exercises.map((exercise) =>
         exercise.id === exerciseRowId ? { ...exercise, sets: this.upsertSet(exercise.sets, set) } : exercise
       ),
+      status: current.status === 'planned' ? 'in_progress' : current.status,
+      startedAt: current.startedAt ?? new Date().toISOString()
+    };
+    await setDoc(this.getSessionDocRef(date), updated);
+  }
+
+  async replaceSets(date: string, exerciseRowId: string, sets: WorkoutSet[]): Promise<void> {
+    const current = await firstValueFrom(this.getByDate(date));
+    if (!current) {
+      throw new Error('No workout scheduled for this date.');
+    }
+    const updated: WorkoutSession = {
+      ...current,
+      exercises: current.exercises.map((exercise) => (exercise.id === exerciseRowId ? { ...exercise, sets } : exercise)),
       status: current.status === 'planned' ? 'in_progress' : current.status,
       startedAt: current.startedAt ?? new Date().toISOString()
     };

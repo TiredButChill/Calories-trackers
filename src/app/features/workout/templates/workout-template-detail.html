@@ -24,17 +24,17 @@
                         <div class="font-medium text-surface-900 dark:text-surface-0 mb-1">{{ exercise.exerciseName }}</div>
                         <div class="flex items-end gap-2 text-sm text-surface-500">
                             <div class="grid gap-0.5">
-                                <label class="text-[10px] text-surface-400">Sets (tùy chọn)</label>
+                                <label class="text-[10px] text-surface-400">{{ 'workout.templateDetail.setsOptional' | t }}</label>
                                 <p-inputnumber [ngModel]="exercise.sets ?? null" (ngModelChange)="updateField(template.exercises, exercise.id, 'sets', $event)" [min]="1" placeholder="-" styleClass="w-14" inputStyleClass="w-14 text-center" />
                             </div>
                             <span class="pb-2">×</span>
                             <div class="grid gap-0.5">
-                                <label class="text-[10px] text-surface-400">Reps từ</label>
+                                <label class="text-[10px] text-surface-400">{{ 'workout.templateDetail.repsFrom' | t }}</label>
                                 <p-inputnumber [ngModel]="exercise.repsMin ?? null" (ngModelChange)="updateField(template.exercises, exercise.id, 'repsMin', $event)" [min]="1" placeholder="-" styleClass="w-14" inputStyleClass="w-14 text-center" />
                             </div>
                             <span class="pb-2">-</span>
                             <div class="grid gap-0.5">
-                                <label class="text-[10px] text-surface-400">Reps đến</label>
+                                <label class="text-[10px] text-surface-400">{{ 'workout.templateDetail.repsTo' | t }}</label>
                                 <p-inputnumber [ngModel]="exercise.repsMax ?? null" (ngModelChange)="updateField(template.exercises, exercise.id, 'repsMax', $event)" [min]="1" placeholder="-" styleClass="w-14" inputStyleClass="w-14 text-center" />
                             </div>
                         </div>
@@ -43,37 +43,37 @@
                 </div>
             </p-card>
         } @empty {
-            <p class="text-center text-surface-400 py-10">Chưa có bài tập nào trong mẫu này</p>
+            <p class="text-center text-surface-400 py-10">{{ 'workout.templateDetail.emptyState' | t }}</p>
         }
     </div>
 
     <p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="showAddDialog.set(true)" />
 }
 
-<p-dialog header="Thêm bài tập vào mẫu" [visible]="showAddDialog()" (visibleChange)="showAddDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
+<p-dialog [header]="'workout.templateDetail.addDialogTitle' | t" [visible]="showAddDialog()" (visibleChange)="showAddDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
     <form [formGroup]="addForm" (ngSubmit)="addExercise()" class="grid gap-4">
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Bài tập</label>
-            <p-select appendTo="body" [options]="(exerciseOptions$ | async) ?? []" optionLabel="label" optionValue="value" formControlName="exerciseId" placeholder="Chọn bài tập" styleClass="w-full" [filter]="true" filterBy="label" />
+            <label class="text-xs font-medium text-surface-500">{{ 'workout.templateDetail.exerciseLabel' | t }}</label>
+            <p-select appendTo="body" [options]="(exerciseOptions$ | async) ?? []" optionLabel="label" optionValue="value" formControlName="exerciseId" [placeholder]="'workout.templateDetail.selectExercise' | t" styleClass="w-full" [filter]="true" filterBy="label" />
         </div>
-        <p class="text-xs text-surface-400 -mt-2">Số sets/reps là tùy chọn — bạn có thể để trống và ghi số liệu thật khi tập.</p>
+        <p class="text-xs text-surface-400 -mt-2">{{ 'workout.templateDetail.optionalHint' | t }}</p>
         <div class="grid grid-cols-3 gap-2">
             <div class="grid gap-1 min-w-0">
-                <label class="text-xs font-medium text-surface-500">Số sets (tùy chọn)</label>
+                <label class="text-xs font-medium text-surface-500">{{ 'workout.templateDetail.setsCountOptional' | t }}</label>
                 <p-inputnumber formControlName="sets" [min]="1" placeholder="-" styleClass="w-full" inputStyleClass="w-full" />
             </div>
             <div class="grid gap-1 min-w-0">
-                <label class="text-xs font-medium text-surface-500">Reps từ (tùy chọn)</label>
+                <label class="text-xs font-medium text-surface-500">{{ 'workout.templateDetail.repsFromOptional' | t }}</label>
                 <p-inputnumber formControlName="repsMin" [min]="1" placeholder="-" styleClass="w-full" inputStyleClass="w-full" />
             </div>
             <div class="grid gap-1 min-w-0">
-                <label class="text-xs font-medium text-surface-500">Reps đến (tùy chọn)</label>
+                <label class="text-xs font-medium text-surface-500">{{ 'workout.templateDetail.repsToOptional' | t }}</label>
                 <p-inputnumber formControlName="repsMax" [min]="1" placeholder="-" styleClass="w-full" inputStyleClass="w-full" />
             </div>
         </div>
         @if (addError()) {
             <p class="text-sm text-red-500">{{ addError() }}</p>
         }
-        <p-button type="submit" label="Thêm" styleClass="w-full" [disabled]="addForm.invalid" />
+        <p-button type="submit" [label]="'workout.templateDetail.addButton' | t" styleClass="w-full" [disabled]="addForm.invalid" />
     </form>
 </p-dialog>

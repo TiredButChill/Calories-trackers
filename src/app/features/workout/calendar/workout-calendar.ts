@@ -4,10 +4,13 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { combineLatest, map, switchMap } from 'rxjs';
+import { ScheduleOverrideService } from '../../../core/services/schedule-override.service';
 import { WorkoutScheduleService } from '../../../core/services/workout-schedule.service';
 import { WorkoutSessionService } from '../../../core/services/workout-session.service';
-import { WorkoutSession } from '../../../core/models';
-import { dayOfWeekFromDate, toDateKey } from '../../../shared/utils/date.util';
+import { ScheduleOverride, WeekSchedule, WorkoutSession } from '../../../core/models';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { dayOfWeekFromDate, startOfWeek, toDateKey, weekStartKey } from '../../../shared/utils/date.util';
+import { applyScheduleOverride } from '../../../shared/utils/schedule-override.util';
 import { DayStatus, resolveDayStatus } from '../../../shared/utils/workout-stats.util';
 
 interface DayCell {
@@ -26,12 +29,13 @@ const STATUS_CLASS: Record<DayStatus, string> = {
 @Component({
   selector: 'app-workout-calendar',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
+  imports: [CommonModule, ButtonModule, TranslatePipe],
   templateUrl: './workout-calendar.html'
 })
 export class WorkoutCalendar {
   private readonly workoutSessionService = inject(WorkoutSessionService);
   private readonly workoutScheduleService = inject(WorkoutScheduleService);
+  private readonly scheduleOverrideService = inject(ScheduleOverrideService);
   private readonly router = inject(Router);
 
   readonly today = toDateKey();
@@ -44,9 +48,13 @@ export class WorkoutCalendar {
       const end = new Date(month.getFullYear(), month.getMonth() + 1, 0);
       const startKey = toDateKey(start);
       const endKey = toDateKey(end);
-      return combineLatest([this.workoutSessionService.getSessionsInRange(startKey, endKey), this.workoutScheduleService.getSchedule()]).pipe(
-        map(([sessions, schedule]) => this.buildGrid(month, sessions, schedule))
-      );
+      const startWeekKey = toDateKey(startOfWeek(start));
+      const endWeekKey = toDateKey(startOfWeek(end));
+      return combineLatest([
+        this.workoutSessionService.getSessionsInRange(startKey, endKey),
+        this.workoutScheduleService.getSchedule(),
+        this.scheduleOverrideService.getOverridesInRange(startWeekKey, endWeekKey)
+      ]).pipe(map(([sessions, schedule, overridesByWeek]) => this.buildGrid(month, sessions, schedule, overridesByWeek)));
     })
   );
 
@@ -71,7 +79,7 @@ export class WorkoutCalendar {
     }
   }
 
-  private buildGrid(month: Date, sessions: WorkoutSession[], schedule: Record<string, string | null>) {
+  private buildGrid(month: Date, sessions: WorkoutSession[], schedule: WeekSchedule, overridesByWeek: Record<string, ScheduleOverride>) {
     const sessionByDate = new Map(sessions.map((session) => [session.date, session]));
     const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
     const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
@@ -85,7 +93,9 @@ export class WorkoutCalendar {
       const date = new Date(month.getFullYear(), month.getMonth(), day);
       const dateKey = toDateKey(date);
       const dayOfWeek = dayOfWeekFromDate(dateKey);
-      const scheduledTemplateId = schedule[dayOfWeek] ?? null;
+      const override = overridesByWeek[weekStartKey(dateKey)] ?? {};
+      const effectiveSchedule = applyScheduleOverride(schedule, override);
+      const scheduledTemplateId = effectiveSchedule[dayOfWeek] ?? null;
       const session = sessionByDate.get(dateKey) ?? null;
       cells.push({ date: dateKey, day, status: resolveDayStatus(dateKey, scheduledTemplateId, session, this.today) });
     }
@@ -98,7 +108,7 @@ export class WorkoutCalendar {
       weeks.push(cells.slice(i, i + 7));
     }
 
-    return { monthLabel: `Tháng ${month.getMonth() + 1}/${month.getFullYear()}`, weeks };
+    return { month: month.getMonth() + 1, year: month.getFullYear(), weeks };
   }
 
   private startOfMonth(date: Date): Date {

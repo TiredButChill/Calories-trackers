@@ -7,7 +7,9 @@ import { ChartModule } from 'primeng/chart';
 import { SelectModule } from 'primeng/select';
 import { combineLatest, map, of, switchMap } from 'rxjs';
 import { ExerciseService } from '../../../core/services/exercise.service';
+import { TranslationService } from '../../../core/services/translation.service';
 import { WorkoutProgressService } from '../../../core/services/workout-progress.service';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { MUSCLE_GROUP_LABELS } from '../../../shared/constants/workout-labels.const';
 import { toDateKey } from '../../../shared/utils/date.util';
 
@@ -40,12 +42,13 @@ const MUSCLE_GROUP_CHART_COLORS = [
 @Component({
   selector: 'app-workout-progress',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, ChartModule, SelectModule],
+  imports: [CommonModule, FormsModule, CardModule, ChartModule, SelectModule, TranslatePipe],
   templateUrl: './workout-progress.html'
 })
 export class WorkoutProgress {
   private readonly exerciseService = inject(ExerciseService);
   private readonly workoutProgressService = inject(WorkoutProgressService);
+  private readonly translationService = inject(TranslationService);
 
   readonly selectedExerciseId = signal<string | null>(null);
   exerciseOptions$ = this.exerciseService.getExercises().pipe(map((list) => list.map((exercise) => ({ label: exercise.name, value: exercise.id }))));
@@ -55,8 +58,20 @@ export class WorkoutProgress {
     map((points) => ({
       labels: points.map((point) => point.date.slice(5)),
       datasets: [
-        { label: '1RM ước tính (kg)', data: points.map((point) => point.estOneRm), borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.3 },
-        { label: 'Mức tạ cao nhất (kg)', data: points.map((point) => point.maxWeight), borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.3 }
+        {
+          label: this.translationService.t('workout.progress.estOneRmDataset'),
+          data: points.map((point) => point.estOneRm),
+          borderColor: '#3b82f6',
+          backgroundColor: '#3b82f6',
+          tension: 0.3
+        },
+        {
+          label: this.translationService.t('workout.progress.maxWeightDataset'),
+          data: points.map((point) => point.maxWeight),
+          borderColor: '#10b981',
+          backgroundColor: '#10b981',
+          tension: 0.3
+        }
       ]
     }))
   );
@@ -64,7 +79,7 @@ export class WorkoutProgress {
   weeklyVolumeChartData$ = this.workoutProgressService.getWeeklyVolume(8).pipe(
     map((points) => ({
       labels: points.map((point) => point.weekStart.slice(5)),
-      datasets: [{ label: 'Volume (kg)', data: points.map((point) => point.totalVolume), backgroundColor: '#3b82f6' }]
+      datasets: [{ label: this.translationService.t('workout.progress.volumeDataset'), data: points.map((point) => point.totalVolume), backgroundColor: '#3b82f6' }]
     }))
   );
 
@@ -75,10 +90,10 @@ export class WorkoutProgress {
         .filter(([, count]) => count > 0)
         .sort(([, a], [, b]) => b - a);
       return {
-        labels: entries.map(([group]) => MUSCLE_GROUP_LABELS[group]),
+        labels: entries.map(([group]) => this.translationService.t(MUSCLE_GROUP_LABELS[group])),
         datasets: [
           {
-            label: 'Sets',
+            label: this.translationService.t('workout.progress.setsDataset'),
             data: entries.map(([, count]) => count),
             backgroundColor: entries.map((_, index) => MUSCLE_GROUP_CHART_COLORS[index % MUSCLE_GROUP_CHART_COLORS.length])
           }

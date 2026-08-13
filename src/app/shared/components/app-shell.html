@@ -1,7 +1,12 @@
 <div class="min-h-dvh flex flex-col bg-surface-50 dark:bg-surface-950">
     <header class="sticky top-0 z-10 flex items-center justify-between px-4 h-14 bg-surface-0 dark:bg-surface-900 border-b border-surface-200 dark:border-surface-800">
-        <span class="font-semibold text-surface-900 dark:text-surface-0">Calories Tracker</span>
-        <p-button icon="pi pi-sign-out" [text]="true" [rounded]="true" severity="secondary" (onClick)="logout()" />
+        <span class="font-semibold text-surface-900 dark:text-surface-0">{{ 'common.appName' | t }}</span>
+        <div class="flex items-center gap-1">
+            <a routerLink="/settings">
+                <p-button icon="pi pi-cog" [text]="true" [rounded]="true" severity="secondary" />
+            </a>
+            <p-button icon="pi pi-sign-out" [text]="true" [rounded]="true" severity="secondary" (onClick)="logout()" />
+        </div>
     </header>
 
     <main class="flex-1 p-4 pb-24 max-w-xl w-full mx-auto">
@@ -21,7 +26,7 @@
                     class="flex flex-col items-center justify-center gap-1 py-2.5"
                 >
                     <i class="pi {{ item.icon }} text-lg"></i>
-                    <span class="text-xs">{{ item.label }}</span>
+                    <span class="text-xs">{{ item.labelKey | t }}</span>
                 </a>
             }
         </div>

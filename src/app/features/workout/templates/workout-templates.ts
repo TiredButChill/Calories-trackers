@@ -8,11 +8,12 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { WorkoutScheduleService } from '../../../core/services/workout-schedule.service';
 import { WorkoutTemplateService } from '../../../core/services/workout-template.service';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-workout-templates',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, CardModule, DialogModule, InputTextModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, CardModule, DialogModule, InputTextModule, TranslatePipe],
   templateUrl: './workout-templates.html'
 })
 export class WorkoutTemplates {

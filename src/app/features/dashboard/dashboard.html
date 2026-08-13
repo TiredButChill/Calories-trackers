@@ -1,16 +1,16 @@
-<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Hôm nay</h1>
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'dashboard.title' | t }}</h1>
 
 @if (summary$ | async; as summary) {
     <p-card styleClass="rounded-2xl shadow-sm mb-4">
         <div class="flex items-center justify-between">
             <div>
-                <div class="text-surface-500 text-sm">Calories</div>
+                <div class="text-surface-500 text-sm">{{ 'dashboard.calories' | t }}</div>
                 <div class="text-3xl font-bold text-surface-900 dark:text-surface-0">{{ summary.calories.consumed }}</div>
                 <div class="text-surface-500 text-sm">/ {{ summary.calories.goal }} kcal</div>
             </div>
             <div class="text-right">
                 <div class="text-sm" [class]="summary.calories.remaining >= 0 ? 'text-green-500' : 'text-red-500'">
-                    {{ summary.calories.remaining >= 0 ? 'Còn lại ' + summary.calories.remaining : 'Vượt ' + -summary.calories.remaining }}
+                    {{ summary.calories.remaining >= 0 ? ('dashboard.remaining' | t) + summary.calories.remaining : ('dashboard.over' | t) + -summary.calories.remaining }}
                 </div>
                 <div class="text-surface-400 text-xs">{{ summary.calories.progress }}%</div>
             </div>
@@ -20,12 +20,12 @@
 
     <div class="grid grid-cols-3 gap-3">
         @for (macro of [
-            { label: 'Đạm', unit: 'g', value: summary.protein },
-            { label: 'Béo', unit: 'g', value: summary.fat },
-            { label: 'Tinh bột', unit: 'g', value: summary.carb }
-        ]; track macro.label) {
+            { labelKey: 'dashboard.protein', unit: 'g', value: summary.protein },
+            { labelKey: 'dashboard.fat', unit: 'g', value: summary.fat },
+            { labelKey: 'dashboard.carb', unit: 'g', value: summary.carb }
+        ]; track macro.labelKey) {
             <p-card styleClass="rounded-xl shadow-sm text-center">
-                <div class="text-surface-500 text-xs">{{ macro.label }}</div>
+                <div class="text-surface-500 text-xs">{{ macro.labelKey | t }}</div>
                 <div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ macro.value.consumed }}{{ macro.unit }}</div>
                 <div class="text-surface-400 text-xs mb-2">/ {{ macro.value.goal }}{{ macro.unit }}</div>
                 <p-progressbar [value]="clampProgress(macro.value.progress)" [showValue]="false" styleClass="h-1.5" />
@@ -39,11 +39,11 @@
         @if (todayWorkout$ | async; as workout) {
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-surface-500 text-sm">Tập luyện hôm nay</div>
+                    <div class="text-surface-500 text-sm">{{ 'dashboard.todayWorkout' | t }}</div>
                     <div class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ workout.templateName }}</div>
                     <div class="text-surface-400 text-xs mt-1">{{ sessionSetCount(workout) }} sets · {{ sessionVolume(workout) }} kg</div>
                 </div>
-                <p-tag [value]="statusLabels[workout.status]" [severity]="workout.status === 'completed' ? 'success' : workout.status === 'in_progress' ? 'warn' : 'secondary'" />
+                <p-tag [value]="statusLabels[workout.status] | t" [severity]="workout.status === 'completed' ? 'success' : workout.status === 'in_progress' ? 'warn' : 'secondary'" />
             </div>
         } @else if (todayWorkoutError()) {
             <div class="flex items-center justify-between">
@@ -51,7 +51,7 @@
             </div>
         } @else {
             <div class="flex items-center justify-between">
-                <div class="text-surface-500 text-sm">🧘 Hôm nay là ngày nghỉ</div>
+                <div class="text-surface-500 text-sm">{{ 'dashboard.restDay' | t }}</div>
             </div>
         }
     </p-card>

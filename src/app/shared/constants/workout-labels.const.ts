@@ -2,65 +2,65 @@ import { DayOfWeek, Equipment, MuscleGroup } from '../../core/models';
 
 export const MUSCLE_GROUP_LABELS: Record<MuscleGroup, string> = {
   // Chest
-  upper_chest: 'Ngực trên',
-  mid_chest: 'Ngực giữa',
-  lower_chest: 'Ngực dưới',
+  upper_chest: 'workout.muscle.upperChest',
+  mid_chest: 'workout.muscle.midChest',
+  lower_chest: 'workout.muscle.lowerChest',
 
   // Back
-  lats: 'Xô',
-  upper_back: 'Lưng trên',
-  traps: 'Cầu vai',
-  lower_back: 'Lưng dưới',
+  lats: 'workout.muscle.lats',
+  upper_back: 'workout.muscle.upperBack',
+  traps: 'workout.muscle.traps',
+  lower_back: 'workout.muscle.lowerBack',
 
   // Shoulders
-  front_delts: 'Vai trước',
-  side_delts: 'Vai giữa',
-  rear_delts: 'Vai sau',
+  front_delts: 'workout.muscle.frontDelts',
+  side_delts: 'workout.muscle.sideDelts',
+  rear_delts: 'workout.muscle.rearDelts',
 
   // Arms
-  biceps: 'Tay trước',
-  triceps: 'Tay sau',
-  forearms: 'Cẳng tay',
-  brachialis: 'Cơ cánh tay',
+  biceps: 'workout.muscle.biceps',
+  triceps: 'workout.muscle.triceps',
+  forearms: 'workout.muscle.forearms',
+  brachialis: 'workout.muscle.brachialis',
 
   // Core
-  abs: 'Cơ bụng',
-  obliques: 'Cơ liên sườn',
+  abs: 'workout.muscle.abs',
+  obliques: 'workout.muscle.obliques',
 
   // Legs
-  quads: 'Đùi trước',
-  hamstrings: 'Đùi sau',
-  glutes: 'Mông',
-  adductors: 'Đùi trong',
-  abductors: 'Đùi ngoài',
-  calves: 'Bắp chân',
+  quads: 'workout.muscle.quads',
+  hamstrings: 'workout.muscle.hamstrings',
+  glutes: 'workout.muscle.glutes',
+  adductors: 'workout.muscle.adductors',
+  abductors: 'workout.muscle.abductors',
+  calves: 'workout.muscle.calves',
 
   // Other
-  other: 'Khác',
+  other: 'workout.muscle.other',
 };
 
 export const EQUIPMENT_LABELS: Record<Equipment, string> = {
-  barbell: 'Tạ đòn',
-  dumbbell: 'Tạ đơn',
-  machine: 'Máy',
-  cable: 'Cáp',
-  bodyweight: 'Thân thể',
-  kettlebell: 'Kettlebell',
-  other: 'Khác'
+  barbell: 'workout.equipment.barbell',
+  dumbbell: 'workout.equipment.dumbbell',
+  machine: 'workout.equipment.machine',
+  cable: 'workout.equipment.cable',
+  bodyweight: 'workout.equipment.bodyweight',
+  kettlebell: 'workout.equipment.kettlebell',
+  other: 'workout.equipment.other'
 };
 
 export const DAYS_OF_WEEK: { value: DayOfWeek; label: string }[] = [
-  { value: 'mon', label: 'Thứ 2' },
-  { value: 'tue', label: 'Thứ 3' },
-  { value: 'wed', label: 'Thứ 4' },
-  { value: 'thu', label: 'Thứ 5' },
-  { value: 'fri', label: 'Thứ 6' },
-  { value: 'sat', label: 'Thứ 7' },
-  { value: 'sun', label: 'Chủ nhật' }
+  { value: 'mon', label: 'workout.day.mon' },
+  { value: 'tue', label: 'workout.day.tue' },
+  { value: 'wed', label: 'workout.day.wed' },
+  { value: 'thu', label: 'workout.day.thu' },
+  { value: 'fri', label: 'workout.day.fri' },
+  { value: 'sat', label: 'workout.day.sat' },
+  { value: 'sun', label: 'workout.day.sun' }
 ];
 
 export const WORKOUT_STATUS_LABELS: Record<'planned' | 'in_progress' | 'completed', string> = {
-  planned: 'Chưa bắt đầu',
-  in_progress: 'Đang tập',
-  completed: 'Hoàn thành'
+  planned: 'workout.status.planned',
+  in_progress: 'workout.status.inProgress',
+  completed: 'workout.status.completed'
 };

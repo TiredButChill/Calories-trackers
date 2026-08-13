@@ -1,4 +1,4 @@
-<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Nhật ký hôm nay</h1>
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'daily-log.title' | t }}</h1>
 
 @for (group of mealGroups((log$ | async)?.items); track group.meal) {
     <div class="mb-4">
@@ -15,7 +15,7 @@
                     </div>
                 </p-card>
             } @empty {
-                <p class="text-surface-400 text-sm">Chưa có món nào</p>
+                <p class="text-surface-400 text-sm">{{ 'daily-log.emptyMeal' | t }}</p>
             }
         </div>
     </div>
@@ -23,20 +23,20 @@
 
 <p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="openDialog()" />
 
-<p-dialog header="Thêm vào nhật ký" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '28rem' }">
+<p-dialog [header]="'daily-log.addDialogHeader' | t" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '28rem' }">
     <form [formGroup]="logForm" (ngSubmit)="submit()" class="grid gap-4">
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Món ăn</label>
-            <p-select appendTo="body" formControlName="foodId" [options]="(foods$ | async) ?? []" optionLabel="name" optionValue="id" placeholder="Chọn món ăn" styleClass="w-full" [filter]="true" filterBy="name" />
+            <label class="text-xs font-medium text-surface-500">{{ 'daily-log.foodLabel' | t }}</label>
+            <p-select appendTo="body" formControlName="foodId" [options]="(foods$ | async) ?? []" optionLabel="name" optionValue="id" [placeholder]="'daily-log.foodPlaceholder' | t" styleClass="w-full" [filter]="true" filterBy="name" />
         </div>
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Số gram</label>
-            <p-inputnumber formControlName="grams" placeholder="Số gram" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
+            <label class="text-xs font-medium text-surface-500">{{ 'daily-log.gramsLabel' | t }}</label>
+            <p-inputnumber formControlName="grams" [placeholder]="'daily-log.gramsPlaceholder' | t" [min]="0" styleClass="w-full" inputStyleClass="w-full" />
         </div>
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Bữa ăn</label>
-            <p-select appendTo="body" formControlName="meal" [options]="mealTypes" optionLabel="label" optionValue="value" placeholder="Bữa ăn" styleClass="w-full" />
+            <label class="text-xs font-medium text-surface-500">{{ 'daily-log.mealLabel' | t }}</label>
+            <p-select appendTo="body" formControlName="meal" [options]="getMealTypes()" optionLabel="label" optionValue="value" [placeholder]="'daily-log.mealPlaceholder' | t" styleClass="w-full" />
         </div>
-        <p-button type="submit" label="Thêm" styleClass="w-full" [disabled]="logForm.invalid" />
+        <p-button type="submit" [label]="'daily-log.addButton' | t" styleClass="w-full" [disabled]="logForm.invalid" />
     </form>
 </p-dialog>

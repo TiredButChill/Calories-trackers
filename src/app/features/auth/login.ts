@@ -5,16 +5,19 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { filter, firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { TranslationService } from '../../core/services/translation.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CardModule],
+  imports: [CommonModule, ButtonModule, CardModule, TranslatePipe],
   templateUrl: './login.html'
 })
 export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly translationService = inject(TranslationService);
 
   readonly currentYear = new Date().getFullYear();
   readonly loading = signal(false);
@@ -31,7 +34,7 @@ export class Login {
       await firstValueFrom(this.authService.currentUser$.pipe(filter((currentUser) => !!currentUser)));
       await this.router.navigateByUrl('/dashboard');
     } catch {
-      this.error.set('Đăng nhập thất bại. Vui lòng thử lại.');
+      this.error.set(this.translationService.t('auth.signInError'));
     } finally {
       this.loading.set(false);
     }

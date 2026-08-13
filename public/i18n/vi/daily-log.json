@@ -1,0 +1,16 @@
+{
+  "title": "Nhật ký hôm nay",
+  "mealBreakfast": "Bữa sáng",
+  "mealLunch": "Bữa trưa",
+  "mealDinner": "Bữa tối",
+  "mealSnack": "Ăn vặt",
+  "emptyMeal": "Chưa có món nào",
+  "addDialogHeader": "Thêm vào nhật ký",
+  "foodLabel": "Món ăn",
+  "foodPlaceholder": "Chọn món ăn",
+  "gramsLabel": "Số gram",
+  "gramsPlaceholder": "Số gram",
+  "mealLabel": "Bữa ăn",
+  "mealPlaceholder": "Bữa ăn",
+  "addButton": "Thêm"
+}

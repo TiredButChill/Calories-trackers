@@ -1,23 +1,23 @@
-<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Tiến độ</h1>
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'workout.progress.title' | t }}</h1>
 
-<p-card header="Sức mạnh theo bài tập" styleClass="rounded-xl shadow-sm mb-4">
-    <p-select appendTo="body" [options]="(exerciseOptions$ | async) ?? []" optionLabel="label" optionValue="value" [ngModel]="selectedExerciseId()" (ngModelChange)="selectedExerciseId.set($event)" placeholder="Chọn bài tập" styleClass="w-full mb-3" [filter]="true" filterBy="label" />
+<p-card [header]="'workout.progress.strengthCardHeader' | t" styleClass="rounded-xl shadow-sm mb-4">
+    <p-select appendTo="body" [options]="(exerciseOptions$ | async) ?? []" optionLabel="label" optionValue="value" [ngModel]="selectedExerciseId()" (ngModelChange)="selectedExerciseId.set($event)" [placeholder]="'workout.progress.selectExercise' | t" styleClass="w-full mb-3" [filter]="true" filterBy="label" />
     @if (selectedExerciseId()) {
         <div class="h-64">
             <p-chart type="line" [data]="strengthChartData$ | async" [options]="chartOptions" />
         </div>
     } @else {
-        <p class="text-center text-surface-400 py-10">Chọn một bài tập để xem tiến độ</p>
+        <p class="text-center text-surface-400 py-10">{{ 'workout.progress.selectExerciseEmptyState' | t }}</p>
     }
 </p-card>
 
-<p-card header="Volume theo tuần" styleClass="rounded-xl shadow-sm mb-4">
+<p-card [header]="'workout.progress.weeklyVolumeHeader' | t" styleClass="rounded-xl shadow-sm mb-4">
     <div class="h-64">
         <p-chart type="bar" [data]="weeklyVolumeChartData$ | async" [options]="chartOptions" />
     </div>
 </p-card>
 
-<p-card header="Volume theo nhóm cơ (28 ngày)" styleClass="rounded-xl shadow-sm">
+<p-card [header]="'workout.progress.muscleGroupHeader' | t" styleClass="rounded-xl shadow-sm">
     <div class="h-64">
         <p-chart type="doughnut" [data]="muscleGroupChartData$ | async" [options]="chartOptions" />
     </div>

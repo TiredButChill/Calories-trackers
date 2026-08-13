@@ -8,11 +8,12 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { WeightService } from '../../core/services/weight.service';
 import { toDateKey } from '../../shared/utils/date.util';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-weight',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputNumberModule, InputTextModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputNumberModule, InputTextModule, TranslatePipe],
   templateUrl: './weight.html'
 })
 export class Weight {

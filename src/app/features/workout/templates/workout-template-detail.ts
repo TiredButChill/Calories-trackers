@@ -10,13 +10,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { map } from 'rxjs';
 import { ExerciseService } from '../../../core/services/exercise.service';
+import { TranslationService } from '../../../core/services/translation.service';
 import { WorkoutTemplateService } from '../../../core/services/workout-template.service';
 import { Exercise, WorkoutTemplateExercise } from '../../../core/models';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-workout-template-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, ButtonModule, CardModule, DialogModule, InputNumberModule, InputTextModule, SelectModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, ButtonModule, CardModule, DialogModule, InputNumberModule, InputTextModule, SelectModule, TranslatePipe],
   templateUrl: './workout-template-detail.html'
 })
 export class WorkoutTemplateDetail {
@@ -24,6 +26,7 @@ export class WorkoutTemplateDetail {
   private readonly fb = inject(FormBuilder);
   private readonly workoutTemplateService = inject(WorkoutTemplateService);
   private readonly exerciseService = inject(ExerciseService);
+  private readonly translationService = inject(TranslationService);
 
   private readonly templateId = this.route.snapshot.paramMap.get('id')!;
   private exercisesList: Exercise[] = [];
@@ -68,7 +71,7 @@ export class WorkoutTemplateDetail {
     const value = this.addForm.getRawValue();
     const exercise = this.exercisesList.find((candidate) => candidate.id === value.exerciseId);
     if (!exercise) {
-      this.addError.set('Vui lòng chọn một bài tập từ danh sách.');
+      this.addError.set(this.translationService.t('workout.templateDetail.addExerciseErrorSelect'));
       return;
     }
     try {
@@ -84,7 +87,7 @@ export class WorkoutTemplateDetail {
       this.addForm.reset({ exerciseId: '', sets: null, repsMin: null, repsMax: null });
       this.showAddDialog.set(false);
     } catch {
-      this.addError.set('Không thể thêm bài tập. Vui lòng thử lại.');
+      this.addError.set(this.translationService.t('workout.templateDetail.addExerciseErrorGeneric'));
     }
   }
 

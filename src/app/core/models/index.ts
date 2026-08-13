@@ -7,3 +7,6 @@ export * from './exercise.model';
 export * from './workout-template.model';
 export * from './workout-schedule.model';
 export * from './workout-session.model';
+export * from './schedule-override.model';
+export * from './workout-display-settings.model';
+export * from './app-settings.model';

@@ -1,4 +1,4 @@
-<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Bài tập mẫu</h1>
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'workout.templates.title' | t }}</h1>
 
 <div class="grid gap-2">
     @for (template of templates$ | async; track template.id) {
@@ -6,24 +6,24 @@
             <div class="flex justify-between items-center">
                 <a [routerLink]="['/workout/templates', template.id]" class="flex-1">
                     <div class="font-medium text-surface-900 dark:text-surface-0">{{ template.name }}</div>
-                    <div class="text-sm text-surface-500">{{ template.exercises.length }} bài tập</div>
+                    <div class="text-sm text-surface-500">{{ template.exercises.length }} {{ 'workout.templates.exercisesCount' | t }}</div>
                 </a>
                 <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" (onClick)="remove(template.id!)" />
             </div>
         </p-card>
     } @empty {
-        <p class="text-center text-surface-400 py-10">Chưa có bài tập mẫu nào</p>
+        <p class="text-center text-surface-400 py-10">{{ 'workout.templates.emptyState' | t }}</p>
     }
 </div>
 
 <p-button icon="pi pi-plus" [rounded]="true" styleClass="!fixed right-4 bottom-28 !w-14 !h-14 shadow-lg z-10" (onClick)="showDialog.set(true)" />
 
-<p-dialog header="Tạo bài tập mẫu" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
+<p-dialog [header]="'workout.templates.dialogTitle' | t" [visible]="showDialog()" (visibleChange)="showDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
     <form [formGroup]="templateForm" (ngSubmit)="submit()" class="grid gap-4">
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Tên bài tập mẫu</label>
-            <input pInputText formControlName="name" placeholder="VD: Push, Pull, Legs" class="w-full" />
+            <label class="text-xs font-medium text-surface-500">{{ 'workout.templates.nameLabel' | t }}</label>
+            <input pInputText formControlName="name" [placeholder]="'workout.templates.namePlaceholder' | t" class="w-full" />
         </div>
-        <p-button type="submit" label="Tạo" styleClass="w-full" [disabled]="templateForm.invalid" />
+        <p-button type="submit" [label]="'workout.templates.createButton' | t" styleClass="w-full" [disabled]="templateForm.invalid" />
     </form>
 </p-dialog>

@@ -1,0 +1,9 @@
+{
+  "title": "Weight",
+  "emptyState": "No weight entries yet",
+  "addDialogHeader": "Add weight",
+  "dateLabel": "Date",
+  "weightLabel": "Weight (kg)",
+  "weightPlaceholder": "Weight (kg)",
+  "saveButton": "Save"
+}

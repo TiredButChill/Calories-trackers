@@ -1,0 +1,9 @@
+{
+  "title": "Cân nặng",
+  "emptyState": "Chưa có dữ liệu cân nặng",
+  "addDialogHeader": "Thêm cân nặng",
+  "dateLabel": "Ngày",
+  "weightLabel": "Cân nặng (kg)",
+  "weightPlaceholder": "Cân nặng (kg)",
+  "saveButton": "Lưu"
+}

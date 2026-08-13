@@ -1,0 +1,18 @@
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'settings.title' | t }}</h1>
+
+<div class="grid gap-3">
+    <p-card styleClass="rounded-xl shadow-sm">
+        <div class="text-sm font-medium text-surface-700 dark:text-surface-200 mb-2">{{ 'settings.theme' | t }}</div>
+        <p-selectbutton class="w-full" [options]="getThemeOptions()" optionLabel="label" optionValue="value" [ngModel]="prefs().theme" (ngModelChange)="setTheme($event)" styleClass="w-full" />
+    </p-card>
+
+    <p-card styleClass="rounded-xl shadow-sm">
+        <div class="text-sm font-medium text-surface-700 dark:text-surface-200 mb-2">{{ 'settings.language' | t }}</div>
+        <p-selectbutton class="w-full" [options]="getLanguageOptions()" optionLabel="label" optionValue="value" [ngModel]="prefs().language" (ngModelChange)="setLanguage($event)" styleClass="w-full" />
+    </p-card>
+
+    <p-card styleClass="rounded-xl shadow-sm">
+        <div class="text-sm font-medium text-surface-700 dark:text-surface-200 mb-2">{{ 'settings.fontSize' | t }}</div>
+        <p-selectbutton class="w-full" [options]="getFontSizeOptions()" optionLabel="label" optionValue="value" [ngModel]="prefs().fontSize" (ngModelChange)="setFontSize($event)" styleClass="w-full" />
+    </p-card>
+</div>

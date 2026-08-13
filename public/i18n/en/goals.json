@@ -1,0 +1,9 @@
+{
+  "title": "Daily goals",
+  "caloriesLabel": "Calories (kcal)",
+  "proteinLabel": "Protein (g)",
+  "fatLabel": "Fat (g)",
+  "carbLabel": "Carbs (g)",
+  "saveButton": "Save goals",
+  "savedMessage": "Saved!"
+}

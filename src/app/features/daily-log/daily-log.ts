@@ -8,27 +8,22 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { DailyLogService } from '../../core/services/daily-log.service';
 import { FoodService } from '../../core/services/food.service';
+import { TranslationService } from '../../core/services/translation.service';
 import { DailyLogItem, Food, MealType } from '../../core/models';
-
-const MEAL_TYPES: { label: string; value: MealType }[] = [
-  { label: 'Bữa sáng', value: 'breakfast' },
-  { label: 'Bữa trưa', value: 'lunch' },
-  { label: 'Bữa tối', value: 'dinner' },
-  { label: 'Ăn vặt', value: 'snack' }
-];
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-daily-log',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputNumberModule, SelectModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputNumberModule, SelectModule, TranslatePipe],
   templateUrl: './daily-log.html'
 })
 export class DailyLog {
   private readonly fb = inject(FormBuilder);
   private readonly dailyLogService = inject(DailyLogService);
   private readonly foodService = inject(FoodService);
+  private readonly translationService = inject(TranslationService);
 
-  mealTypes = MEAL_TYPES;
   foods$ = this.foodService.getFoods();
   log$ = this.dailyLogService.getToday();
   readonly showDialog = signal(false);
@@ -45,8 +40,17 @@ export class DailyLog {
     this.foods$.subscribe((foods) => (this.foods = foods));
   }
 
+  getMealTypes(): { label: string; value: MealType }[] {
+    return [
+      { label: this.translationService.t('daily-log.mealBreakfast'), value: 'breakfast' },
+      { label: this.translationService.t('daily-log.mealLunch'), value: 'lunch' },
+      { label: this.translationService.t('daily-log.mealDinner'), value: 'dinner' },
+      { label: this.translationService.t('daily-log.mealSnack'), value: 'snack' }
+    ];
+  }
+
   mealGroups(items: DailyLogItem[] | undefined): { meal: MealType; label: string; items: DailyLogItem[] }[] {
-    return MEAL_TYPES.map(({ value, label }) => ({
+    return this.getMealTypes().map(({ value, label }) => ({
       meal: value,
       label,
       items: (items ?? []).filter((item) => item.meal === value)

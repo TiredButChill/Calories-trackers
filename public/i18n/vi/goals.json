@@ -1,0 +1,9 @@
+{
+  "title": "Mục tiêu hàng ngày",
+  "caloriesLabel": "Calories (kcal)",
+  "proteinLabel": "Đạm (g)",
+  "fatLabel": "Béo (g)",
+  "carbLabel": "Tinh bột (g)",
+  "saveButton": "Lưu mục tiêu",
+  "savedMessage": "Đã lưu!"
+}

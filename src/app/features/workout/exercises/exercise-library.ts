@@ -14,11 +14,11 @@ import { TextareaModule } from 'primeng/textarea';
 import { combineLatest, firstValueFrom, startWith, switchMap, take } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { ExerciseService } from '../../../core/services/exercise.service';
+import { TranslationService } from '../../../core/services/translation.service';
 import { Equipment, Exercise, MuscleGroup } from '../../../core/models';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { EQUIPMENT_LABELS, MUSCLE_GROUP_LABELS } from '../../../shared/constants/workout-labels.const';
 
-const MUSCLE_GROUP_OPTIONS = (Object.keys(MUSCLE_GROUP_LABELS) as MuscleGroup[]).map((value) => ({ value, label: MUSCLE_GROUP_LABELS[value] }));
-const EQUIPMENT_OPTIONS = (Object.keys(EQUIPMENT_LABELS) as Equipment[]).map((value) => ({ value, label: EQUIPMENT_LABELS[value] }));
 const VALID_MUSCLE_GROUPS = new Set<string>(Object.keys(MUSCLE_GROUP_LABELS));
 const VALID_EQUIPMENT = new Set<string>(Object.keys(EQUIPMENT_LABELS));
 
@@ -44,20 +44,32 @@ function parseBulkInput(raw: string): unknown {
 @Component({
   selector: 'app-exercise-library',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputTextModule, IconFieldModule, InputIconModule, SelectModule, MultiSelectModule, TextareaModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    CardModule,
+    DialogModule,
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+    SelectModule,
+    MultiSelectModule,
+    TextareaModule,
+    TranslatePipe
+  ],
   templateUrl: './exercise-library.html'
 })
 export class ExerciseLibrary {
   private readonly fb = inject(FormBuilder);
   private readonly exerciseService = inject(ExerciseService);
   private readonly authService = inject(AuthService);
+  private readonly translationService = inject(TranslationService);
 
   readonly showDialog = signal(false);
   readonly submitError = signal('');
   readonly listError = signal('');
   readonly editingId = signal<string | null>(null);
-  readonly muscleGroupOptions = MUSCLE_GROUP_OPTIONS;
-  readonly equipmentOptions = EQUIPMENT_OPTIONS;
   readonly muscleGroupLabels = MUSCLE_GROUP_LABELS;
   readonly equipmentLabels = EQUIPMENT_LABELS;
 
@@ -66,7 +78,6 @@ export class ExerciseLibrary {
   readonly bulkSuccess = signal('');
   readonly bulkImporting = signal(false);
   readonly bulkImportExample = BULK_IMPORT_EXAMPLE;
-  readonly bulkMuscleGroupHint = MUSCLE_GROUP_OPTIONS.map((option) => option.value).join(', ');
 
   bulkText = this.fb.control('', Validators.required);
 
@@ -88,8 +99,26 @@ export class ExerciseLibrary {
     this.exerciseService.ensureSeeded();
   }
 
+  getMuscleGroupOptions(): { value: MuscleGroup; label: string }[] {
+    return (Object.keys(MUSCLE_GROUP_LABELS) as MuscleGroup[]).map((value) => ({
+      value,
+      label: this.translationService.t(MUSCLE_GROUP_LABELS[value])
+    }));
+  }
+
+  getEquipmentOptions(): { value: Equipment; label: string }[] {
+    return (Object.keys(EQUIPMENT_LABELS) as Equipment[]).map((value) => ({
+      value,
+      label: this.translationService.t(EQUIPMENT_LABELS[value])
+    }));
+  }
+
+  getBulkMuscleGroupHint(): string {
+    return (Object.keys(MUSCLE_GROUP_LABELS) as MuscleGroup[]).join(', ');
+  }
+
   muscleGroupNames(muscleGroups: MuscleGroup[]): string {
-    return muscleGroups.map((group) => this.muscleGroupLabels[group]).join(', ');
+    return muscleGroups.map((group) => this.translationService.t(this.muscleGroupLabels[group])).join(', ');
   }
 
   openAddDialog(): void {
@@ -141,7 +170,7 @@ export class ExerciseLibrary {
       }
       this.showDialog.set(false);
     } catch {
-      this.submitError.set('Không thể lưu bài tập. Vui lòng thử lại.');
+      this.submitError.set(this.translationService.t('workout.exercises.saveError'));
     }
   }
 
@@ -151,7 +180,11 @@ export class ExerciseLibrary {
       await this.exerciseService.deleteExercise(id);
     } catch (error) {
       const code = (error as { code?: string })?.code;
-      this.listError.set(code === 'permission-denied' ? 'Không có quyền xóa bài tập này (kiểm tra Firestore rules).' : 'Không thể xóa bài tập. Vui lòng thử lại.');
+      this.listError.set(
+        code === 'permission-denied'
+          ? this.translationService.t('workout.exercises.deleteErrorPermission')
+          : this.translationService.t('workout.exercises.deleteErrorGeneric')
+      );
     }
   }
 
@@ -170,35 +203,36 @@ export class ExerciseLibrary {
     try {
       parsed = parseBulkInput(this.bulkText.value ?? '');
     } catch {
-      this.bulkError.set('Không đọc được dữ liệu. Kiểm tra lại định dạng (mảng object, VD: [ { "name": ... }, ... ]).');
+      this.bulkError.set(this.translationService.t('workout.exercises.bulkParseError'));
       return;
     }
     if (!Array.isArray(parsed) || parsed.length === 0) {
-      this.bulkError.set('Cần một mảng chứa ít nhất một bài tập.');
+      this.bulkError.set(this.translationService.t('workout.exercises.bulkEmptyArrayError'));
       return;
     }
 
     const currentUser = await firstValueFrom(this.authService.currentUser$.pipe(take(1)));
+    const entryLabel = (index: number) => `${this.translationService.t('workout.exercises.entryPrefix')} ${index + 1}`;
 
     const exercises: Exercise[] = [];
     for (const [index, entry] of parsed.entries()) {
       if (typeof entry !== 'object' || entry === null) {
-        this.bulkError.set(`Bài tập thứ ${index + 1} không hợp lệ.`);
+        this.bulkError.set(`${entryLabel(index)} ${this.translationService.t('workout.exercises.entryInvalidSuffix')}`);
         return;
       }
       const item = entry as Record<string, unknown>;
       if (typeof item['name'] !== 'string' || !item['name']) {
-        this.bulkError.set(`Bài tập thứ ${index + 1} thiếu "name" (chuỗi).`);
+        this.bulkError.set(`${entryLabel(index)} ${this.translationService.t('workout.exercises.entryMissingNameSuffix')}`);
         return;
       }
       const muscleGroups = item['muscleGroups'];
       if (!Array.isArray(muscleGroups) || muscleGroups.length === 0) {
-        this.bulkError.set(`Bài tập thứ ${index + 1} ("${item['name']}") thiếu "muscleGroups" (mảng, ít nhất 1 nhóm cơ).`);
+        this.bulkError.set(`${entryLabel(index)} ("${item['name']}") ${this.translationService.t('workout.exercises.entryMissingMuscleGroupsSuffix')}`);
         return;
       }
       const invalidGroup = muscleGroups.find((group) => !VALID_MUSCLE_GROUPS.has(group));
       if (invalidGroup !== undefined) {
-        this.bulkError.set(`Bài tập thứ ${index + 1} ("${item['name']}") có nhóm cơ không hợp lệ: "${invalidGroup}".`);
+        this.bulkError.set(`${entryLabel(index)} ("${item['name']}") ${this.translationService.t('workout.exercises.entryInvalidMuscleGroupSuffix')} "${invalidGroup}".`);
         return;
       }
       const equipment = typeof item['equipment'] === 'string' && VALID_EQUIPMENT.has(item['equipment']) ? (item['equipment'] as Equipment) : 'other';
@@ -216,10 +250,12 @@ export class ExerciseLibrary {
     this.bulkImporting.set(true);
     try {
       const count = await this.exerciseService.bulkAddExercises(exercises);
-      this.bulkSuccess.set(`Đã thêm ${count} bài tập.`);
+      this.bulkSuccess.set(
+        `${this.translationService.t('workout.exercises.bulkSuccessPrefix')}${count}${this.translationService.t('workout.exercises.bulkSuccessSuffix')}`
+      );
       this.bulkText.reset('');
     } catch {
-      this.bulkError.set('Có lỗi khi lưu dữ liệu. Vui lòng thử lại.');
+      this.bulkError.set(this.translationService.t('workout.exercises.bulkSaveError'));
     } finally {
       this.bulkImporting.set(false);
     }

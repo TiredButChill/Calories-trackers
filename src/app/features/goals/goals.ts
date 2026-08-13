@@ -6,11 +6,12 @@ import { CardModule } from 'primeng/card';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { take } from 'rxjs';
 import { GoalService } from '../../core/services/goal.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-goals',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, InputNumberModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, InputNumberModule, TranslatePipe],
   templateUrl: './goals.html'
 })
 export class Goals {

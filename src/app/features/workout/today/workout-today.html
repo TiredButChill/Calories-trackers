@@ -1,18 +1,25 @@
 @if (viewModel$ | async; as vm) {
     <div class="flex items-center justify-between mb-4">
         <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0">{{ vm.session.templateName }}</h1>
-        <p-tag [value]="statusLabels[vm.session.status]" [severity]="vm.session.status === 'completed' ? 'success' : vm.session.status === 'in_progress' ? 'warn' : 'secondary'" />
+        <div class="flex items-center gap-2">
+            <p-button icon="pi pi-cog" [text]="true" [rounded]="true" severity="secondary" styleClass="!w-8 !h-8" (onClick)="showFormatDialog.set(true)" />
+            <p-tag [value]="statusLabels[vm.session.status] | t" [severity]="vm.session.status === 'completed' ? 'success' : vm.session.status === 'in_progress' ? 'warn' : 'secondary'" />
+        </div>
     </div>
+
+    @if (vm.session.status === 'planned') {
+        <a routerLink="/workout/schedule" class="block text-xs text-primary-500 mb-4">{{ 'workout.today.busyToday' | t }}</a>
+    }
 
     @if (vm.session.status === 'completed') {
         <p-card styleClass="rounded-xl shadow-sm mb-4 bg-primary-50 dark:bg-primary-950/30">
             <div class="grid grid-cols-2 gap-3 text-center">
-                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ sessionSetCount(vm.session) }}</div><div class="text-xs text-surface-500">Sets</div></div>
-                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ sessionRepCount(vm.session) }}</div><div class="text-xs text-surface-500">Reps</div></div>
-                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ sessionVolume(vm.session) }} kg</div><div class="text-xs text-surface-500">Volume</div></div>
-                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ formatDuration(vm.session.durationSeconds) }}</div><div class="text-xs text-surface-500">Thời gian</div></div>
+                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ sessionSetCount(vm.session) }}</div><div class="text-xs text-surface-500">{{ 'workout.today.sets' | t }}</div></div>
+                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ sessionRepCount(vm.session) }}</div><div class="text-xs text-surface-500">{{ 'workout.today.reps' | t }}</div></div>
+                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ sessionVolume(vm.session) }} kg</div><div class="text-xs text-surface-500">{{ 'workout.today.volume' | t }}</div></div>
+                <div><div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ formatDuration(vm.session.durationSeconds) }}</div><div class="text-xs text-surface-500">{{ 'workout.today.duration' | t }}</div></div>
             </div>
-            <p-button label="Sửa buổi tập" icon="pi pi-pencil" [text]="true" styleClass="w-full mt-3" (onClick)="reopen()" />
+            <p-button [label]="'workout.today.editSession' | t" icon="pi pi-pencil" [text]="true" styleClass="w-full mt-3" (onClick)="reopen()" />
         </p-card>
     }
 
@@ -25,96 +32,142 @@
                         <p-tag value="🏆 PR" severity="success" />
                     }
                 </div>
-                <div class="text-xs text-surface-400 mb-2">Tuần trước: {{ previousSetsSummary(row.previousExercise) }}</div>
+                <div class="text-xs text-surface-400 mb-2">{{ 'workout.today.previousWeek' | t }}{{ previousSetsSummary(row.previousExercise) }}</div>
 
-                <div class="flex items-center gap-2 text-[10px] text-surface-400 mb-1">
-                    <span class="w-5"></span>
-                    <span class="w-20 text-center">Kg</span>
-                    <span class="w-4"></span>
-                    <span class="w-20 text-center">Reps</span>
-                </div>
+                @if (vm.setLogFormat === 'per_set') {
+                    <div class="flex items-center gap-2 text-[10px] text-surface-400 mb-1">
+                        <span class="w-5"></span>
+                        <span class="w-20 text-center">{{ 'workout.today.kg' | t }}</span>
+                        <span class="w-4"></span>
+                        <span class="w-20 text-center">{{ 'workout.today.reps' | t }}</span>
+                    </div>
 
-                <div class="grid gap-2">
-                    @for (setRow of row.rows; track setRow.setNumber) {
-                        <div class="flex items-center gap-2">
-                            <span class="w-5 text-xs text-surface-400">{{ setRow.setNumber }}</span>
-                            <p-inputnumber
-                                [ngModel]="setRow.weight"
-                                (ngModelChange)="commitSet(row.exercise.id, setRow, { weight: $event })"
-                                placeholder="kg"
-                                [min]="0"
-                                [maxFractionDigits]="1"
-                                [disabled]="vm.session.status === 'completed'"
-                                styleClass="w-20"
-                                inputStyleClass="w-20 text-center"
-                            />
-                            <span class="text-surface-400">×</span>
-                            <p-inputnumber
-                                [ngModel]="setRow.reps"
-                                (ngModelChange)="commitSet(row.exercise.id, setRow, { reps: $event })"
-                                placeholder="reps"
-                                [min]="0"
-                                [disabled]="vm.session.status === 'completed'"
-                                styleClass="w-20"
-                                inputStyleClass="w-20 text-center"
-                            />
-                            <label class="flex items-center gap-1 text-xs text-surface-500">
-                                <p-checkbox
-                                    [ngModel]="setRow.isWarmup"
-                                    (ngModelChange)="commitSet(row.exercise.id, setRow, { isWarmup: $event })"
-                                    [binary]="true"
+                    <div class="grid gap-2">
+                        @for (setRow of row.rows; track setRow.setNumber) {
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 text-xs text-surface-400">{{ setRow.setNumber }}</span>
+                                <p-inputnumber
+                                    [ngModel]="setRow.weight"
+                                    (ngModelChange)="commitSet(row.exercise.id, setRow, { weight: $event })"
+                                    placeholder="kg"
+                                    [min]="0"
+                                    [maxFractionDigits]="1"
                                     [disabled]="vm.session.status === 'completed'"
+                                    styleClass="w-20"
+                                    inputStyleClass="w-20 text-center"
                                 />
-                                WU
-                            </label>
-                            @if (!setRow.isDraft) {
-                                <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" styleClass="!w-8 !h-8 ml-auto" [disabled]="vm.session.status === 'completed'" (onClick)="removeSet(row.exercise.id, setRow.setNumber)" />
-                            }
-                        </div>
-                    }
-                </div>
+                                <span class="text-surface-400">×</span>
+                                <p-inputnumber
+                                    [ngModel]="setRow.reps"
+                                    (ngModelChange)="commitSet(row.exercise.id, setRow, { reps: $event })"
+                                    placeholder="reps"
+                                    [min]="0"
+                                    [disabled]="vm.session.status === 'completed'"
+                                    styleClass="w-20"
+                                    inputStyleClass="w-20 text-center"
+                                />
+                                <label class="flex items-center gap-1 text-xs text-surface-500">
+                                    <p-checkbox
+                                        [ngModel]="setRow.isWarmup"
+                                        (ngModelChange)="commitSet(row.exercise.id, setRow, { isWarmup: $event })"
+                                        [binary]="true"
+                                        [disabled]="vm.session.status === 'completed'"
+                                    />
+                                    WU
+                                </label>
+                                @if (!setRow.isDraft) {
+                                    <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" styleClass="!w-8 !h-8 ml-auto" [disabled]="vm.session.status === 'completed'" (onClick)="removeSet(row.exercise.id, setRow.setNumber)" />
+                                }
+                            </div>
+                        }
+                    </div>
 
-                @if (vm.session.status !== 'completed') {
-                    <p-button label="+ Set" [text]="true" size="small" styleClass="mt-2" (onClick)="addSetRow(row.exercise.id)" />
+                    @if (vm.session.status !== 'completed') {
+                        <p-button [label]="'workout.today.addSet' | t" [text]="true" size="small" styleClass="mt-2" (onClick)="addSetRow(row.exercise.id)" />
+                    }
+                } @else {
+                    <div class="flex items-center gap-2 text-[10px] text-surface-400 mb-1">
+                        <span class="w-20 text-center">{{ 'workout.today.kg' | t }}</span>
+                        <span class="w-4"></span>
+                        <span class="w-20 text-center">{{ 'workout.today.reps' | t }}</span>
+                        <span class="w-4"></span>
+                        <span class="w-16 text-center">{{ 'workout.today.setCount' | t }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p-inputnumber
+                            [ngModel]="row.compact.weight"
+                            (ngModelChange)="commitCompact(row.exercise.id, row.compact, { weight: $event })"
+                            placeholder="kg"
+                            [min]="0"
+                            [maxFractionDigits]="1"
+                            [disabled]="vm.session.status === 'completed'"
+                            styleClass="w-20"
+                            inputStyleClass="w-20 text-center"
+                        />
+                        <span class="text-surface-400">×</span>
+                        <p-inputnumber
+                            [ngModel]="row.compact.reps"
+                            (ngModelChange)="commitCompact(row.exercise.id, row.compact, { reps: $event })"
+                            placeholder="reps"
+                            [min]="0"
+                            [disabled]="vm.session.status === 'completed'"
+                            styleClass="w-20"
+                            inputStyleClass="w-20 text-center"
+                        />
+                        <span class="text-surface-400">×</span>
+                        <p-inputnumber
+                            [ngModel]="row.compact.setCount"
+                            (ngModelChange)="commitCompact(row.exercise.id, row.compact, { setCount: $event })"
+                            placeholder="set"
+                            [min]="1"
+                            [disabled]="vm.session.status === 'completed'"
+                            styleClass="w-16"
+                            inputStyleClass="w-16 text-center"
+                        />
+                    </div>
                 }
 
                 @if (row.comparison.previousVolume > 0) {
                     <div class="text-xs mt-2" [class.text-green-600]="row.comparison.volumeDeltaKg >= 0" [class.text-red-500]="row.comparison.volumeDeltaKg < 0">
-                        Volume: {{ row.comparison.currentVolume }} kg ({{ row.comparison.volumeDeltaKg >= 0 ? '+' : '' }}{{ row.comparison.volumeDeltaKg }} kg, {{ row.comparison.volumeDeltaPercent >= 0 ? '+' : '' }}{{ row.comparison.volumeDeltaPercent | number: '1.0-1' }}%)
+                        {{ 'workout.today.volumeSummary' | t }}{{ row.comparison.currentVolume }} kg ({{ row.comparison.volumeDeltaKg >= 0 ? '+' : '' }}{{ row.comparison.volumeDeltaKg }} kg, {{ row.comparison.volumeDeltaPercent >= 0 ? '+' : '' }}{{ row.comparison.volumeDeltaPercent | number: '1.0-1' }}%)
                     </div>
                 }
             </p-card>
         } @empty {
-            <p class="text-center text-surface-400 py-10">Chưa có bài tập nào cho hôm nay</p>
+            <p class="text-center text-surface-400 py-10">{{ 'workout.today.noExercises' | t }}</p>
         }
     </div>
 
     @if (vm.session.status !== 'completed') {
         <p-button icon="pi pi-plus" [rounded]="true" [text]="true" styleClass="!fixed right-4 bottom-40 !w-12 !h-12 shadow-lg z-10" (onClick)="showAddExerciseDialog.set(true)" />
-        <p-button label="Hoàn thành buổi tập" icon="pi pi-check" styleClass="w-full mt-4" (onClick)="complete()" />
+        <p-button [label]="'workout.today.completeSession' | t" icon="pi pi-check" styleClass="w-full mt-4" (onClick)="complete()" />
     }
 } @else if (loadError()) {
     <div class="text-center py-20">
         <div class="text-3xl mb-2">⚠️</div>
-        <p class="text-red-500 font-medium">Không tải được dữ liệu</p>
+        <p class="text-red-500 font-medium">{{ 'workout.today.loadErrorTitle' | t }}</p>
         <p class="text-xs text-surface-400 mt-1 px-6">{{ loadError() }}</p>
     </div>
 } @else {
     <div class="text-center py-20">
         <div class="text-3xl mb-2">🧘</div>
-        <p class="text-surface-400">Hôm nay là ngày nghỉ</p>
+        <p class="text-surface-400">{{ 'workout.today.restDay' | t }}</p>
     </div>
 }
 
-<p-dialog header="Thêm bài tập" [visible]="showAddExerciseDialog()" (visibleChange)="showAddExerciseDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
+<p-dialog [header]="'workout.today.addExercise' | t" [visible]="showAddExerciseDialog()" (visibleChange)="showAddExerciseDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
     <form [formGroup]="addExerciseForm" (ngSubmit)="addExercise()" class="grid gap-4">
         <div class="grid gap-1">
-            <label class="text-xs font-medium text-surface-500">Bài tập</label>
-            <p-select appendTo="body" [options]="(exerciseOptions$ | async) ?? []" optionLabel="label" optionValue="value" formControlName="exerciseId" placeholder="Chọn bài tập" styleClass="w-full" [filter]="true" filterBy="label" />
+            <label class="text-xs font-medium text-surface-500">{{ 'workout.today.exerciseLabel' | t }}</label>
+            <p-select appendTo="body" [options]="(exerciseOptions$ | async) ?? []" optionLabel="label" optionValue="value" formControlName="exerciseId" [placeholder]="'workout.today.selectExercise' | t" styleClass="w-full" [filter]="true" filterBy="label" />
         </div>
         @if (addExerciseError()) {
             <p class="text-sm text-red-500">{{ addExerciseError() }}</p>
         }
-        <p-button type="submit" label="Thêm" styleClass="w-full" [disabled]="addExerciseForm.invalid" />
+        <p-button type="submit" [label]="'workout.today.addButton' | t" styleClass="w-full" [disabled]="addExerciseForm.invalid" />
     </form>
+</p-dialog>
+
+<p-dialog [header]="'workout.today.formatDialogTitle' | t" [visible]="showFormatDialog()" (visibleChange)="showFormatDialog.set($event)" [modal]="true" [style]="{ width: '95vw', maxWidth: '24rem' }">
+    <p-selectbutton class="w-full" [options]="getSetLogFormatOptions()" optionLabel="label" optionValue="value" [ngModel]="(displaySettings$ | async)?.setLogFormat" (ngModelChange)="setFormat($event)" styleClass="w-full" />
 </p-dialog>

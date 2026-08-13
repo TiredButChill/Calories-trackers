@@ -13,7 +13,9 @@ import { TextareaModule } from 'primeng/textarea';
 import { startWith, switchMap, take } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { FoodService } from '../../core/services/food.service';
+import { TranslationService } from '../../core/services/translation.service';
 import { Food } from '../../core/models';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 const BULK_IMPORT_EXAMPLE = `[
   { "name": "Cơm trắng", "servingSize": 100, "calories": 130, "protein": 2.7, "fat": 0.3, "carb": 28 },
@@ -33,13 +35,14 @@ function parseBulkInput(raw: string): unknown {
 @Component({
   selector: 'app-foods',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputTextModule, InputNumberModule, IconFieldModule, InputIconModule, TextareaModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, DialogModule, InputTextModule, InputNumberModule, IconFieldModule, InputIconModule, TextareaModule, TranslatePipe],
   templateUrl: './foods.html'
 })
 export class Foods {
   private readonly fb = inject(FormBuilder);
   private readonly foodService = inject(FoodService);
   private readonly authService = inject(AuthService);
+  private readonly translationService = inject(TranslationService);
 
   readonly showDialog = signal(false);
   readonly showBulkDialog = signal(false);
@@ -104,11 +107,11 @@ export class Foods {
     try {
       parsed = parseBulkInput(this.bulkText.value ?? '');
     } catch {
-      this.bulkError.set('Không đọc được dữ liệu. Kiểm tra lại định dạng (mảng object, VD: [ { "name": ... }, ... ]).');
+      this.bulkError.set(this.translationService.t('foods.bulkParseError'));
       return;
     }
     if (!Array.isArray(parsed) || parsed.length === 0) {
-      this.bulkError.set('Cần một mảng chứa ít nhất một món ăn.');
+      this.bulkError.set(this.translationService.t('foods.bulkArrayRequiredError'));
       return;
     }
 
@@ -119,7 +122,7 @@ export class Foods {
     const foods: Food[] = [];
     for (const [index, entry] of parsed.entries()) {
       if (typeof entry !== 'object' || entry === null || typeof (entry as Record<string, unknown>)['name'] !== 'string' || typeof (entry as Record<string, unknown>)['calories'] !== 'number') {
-        this.bulkError.set(`Món thứ ${index + 1} thiếu "name" (chuỗi) hoặc "calories" (số).`);
+        this.bulkError.set(this.translationService.t('foods.bulkItemMissingFieldsError').replace('{n}', String(index + 1)));
         return;
       }
       const item = entry as Record<string, unknown>;
@@ -140,10 +143,10 @@ export class Foods {
     this.bulkImporting.set(true);
     try {
       const count = await this.foodService.bulkAddFoods(foods);
-      this.bulkSuccess.set(`Đã thêm ${count} món ăn.`);
+      this.bulkSuccess.set(this.translationService.t('foods.bulkSuccessMessage').replace('{n}', String(count)));
       this.bulkText.reset('');
     } catch {
-      this.bulkError.set('Có lỗi khi lưu dữ liệu. Vui lòng thử lại.');
+      this.bulkError.set(this.translationService.t('foods.bulkSaveError'));
     } finally {
       this.bulkImporting.set(false);
     }

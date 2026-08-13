@@ -6,19 +6,22 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { TagModule } from 'primeng/tag';
 import { catchError, of, tap } from 'rxjs';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { TranslationService } from '../../core/services/translation.service';
 import { WorkoutSessionService } from '../../core/services/workout-session.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { WORKOUT_STATUS_LABELS } from '../../shared/constants/workout-labels.const';
 import { sessionSetCount, sessionVolume } from '../../shared/utils/workout-stats.util';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, CardModule, ProgressBarModule, TagModule],
+  imports: [CommonModule, RouterLink, CardModule, ProgressBarModule, TagModule, TranslatePipe],
   templateUrl: './dashboard.html'
 })
 export class Dashboard {
   private readonly dashboardService = inject(DashboardService);
   private readonly workoutSessionService = inject(WorkoutSessionService);
+  private readonly translationService = inject(TranslationService);
 
   readonly summary$ = this.dashboardService.getTodaySummary();
   readonly todayWorkoutError = signal('');
@@ -26,7 +29,7 @@ export class Dashboard {
     tap(() => this.todayWorkoutError.set('')),
     catchError((error) => {
       console.error('Failed to load today’s workout', error);
-      this.todayWorkoutError.set('Không tải được dữ liệu tập luyện hôm nay.');
+      this.todayWorkoutError.set(this.translationService.t('dashboard.loadError'));
       return of(null);
     })
   );

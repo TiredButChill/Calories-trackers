@@ -1,0 +1,16 @@
+{
+  "title": "Today's log",
+  "mealBreakfast": "Breakfast",
+  "mealLunch": "Lunch",
+  "mealDinner": "Dinner",
+  "mealSnack": "Snack",
+  "emptyMeal": "No items yet",
+  "addDialogHeader": "Add to log",
+  "foodLabel": "Food",
+  "foodPlaceholder": "Select a food",
+  "gramsLabel": "Amount (g)",
+  "gramsPlaceholder": "Amount (g)",
+  "mealLabel": "Meal",
+  "mealPlaceholder": "Meal",
+  "addButton": "Add"
+}

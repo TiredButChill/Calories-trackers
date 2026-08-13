@@ -1,11 +1,11 @@
-<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Lịch tập</h1>
+<h1 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'workout.schedule.title' | t }}</h1>
 
 @if (schedule$ | async; as schedule) {
     <div class="grid gap-2">
         @for (day of days; track day.value) {
             <p-card styleClass="rounded-xl shadow-sm">
                 <div class="flex items-center gap-3">
-                    <div class="w-16 font-medium text-surface-900 dark:text-surface-0">{{ day.label }}</div>
+                    <div class="w-16 font-medium text-surface-900 dark:text-surface-0">{{ day.label | t }}</div>
                     <p-select appendTo="body"
                         class="flex-1"
                         styleClass="w-full"
@@ -20,10 +20,58 @@
                         [options]="copySourceOptions(day.value)"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="Sao chép..."
+                        [placeholder]="'workout.schedule.copyPlaceholder' | t"
                         [ngModel]="null"
                         (ngModelChange)="copyDay($event, day.value)"
                     />
+                </div>
+            </p-card>
+        }
+    </div>
+}
+
+<h2 class="text-base font-semibold text-surface-900 dark:text-surface-0 mt-6 mb-3">{{ 'workout.schedule.thisWeek' | t }}</h2>
+@if (weekDays$ | async; as weekDays) {
+    <div class="grid gap-2">
+        @for (view of weekDays; track view.day) {
+            <p-card styleClass="rounded-xl shadow-sm">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                    <div>
+                        <div class="font-medium text-surface-900 dark:text-surface-0">
+                            {{ view.label | t }} <span class="text-xs text-surface-400">({{ view.date.slice(5) }})</span>
+                        </div>
+                        <div class="text-xs text-surface-500">
+                            {{ view.status === 'rest' ? ('workout.schedule.rest' | t) : view.templateName }}
+                            @if (view.status === 'missed') {
+                                <span class="text-red-500"> · {{ 'workout.schedule.missed' | t }}</span>
+                            }
+                            @if (view.movedTo) {
+                                <span class="text-primary-500"> · {{ 'workout.schedule.movedTo' | t }}{{ dayLabel(view.movedTo) }}</span>
+                            }
+                            @if (view.movedFrom) {
+                                <span class="text-primary-500"> · {{ 'workout.schedule.movedFrom' | t }}{{ dayLabel(view.movedFrom) }}</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        @if (view.canReschedule) {
+                            <p-select appendTo="body"
+                                styleClass="w-40"
+                                [options]="view.targetOptions"
+                                optionLabel="label"
+                                optionValue="value"
+                                [placeholder]="'workout.schedule.reschedulePlaceholder' | t"
+                                [ngModel]="null"
+                                (ngModelChange)="rescheduleDay(view.day, $event)"
+                            />
+                        }
+                        @if (view.movedTo) {
+                            <p-button [label]="'workout.schedule.cancelReschedule' | t" [text]="true" size="small" (onClick)="cancelReschedule(view.day)" />
+                        }
+                        @if (view.movedFrom) {
+                            <p-button [label]="'workout.schedule.cancelReschedule' | t" [text]="true" size="small" (onClick)="cancelReschedule(view.movedFrom)" />
+                        }
+                    </div>
                 </div>
             </p-card>
         }

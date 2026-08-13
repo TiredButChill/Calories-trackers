@@ -18,6 +18,7 @@ export const appRoutes: Routes = [
             { path: 'log', loadComponent: () => import('@/features/daily-log/daily-log').then((c) => c.DailyLog) },
             { path: 'goals', loadComponent: () => import('@/features/goals/goals').then((c) => c.Goals) },
             { path: 'weight', loadComponent: () => import('@/features/weight/weight').then((c) => c.Weight) },
+            { path: 'settings', loadComponent: () => import('@/features/settings/settings').then((c) => c.Settings) },
             {
                 path: 'workout',
                 loadComponent: () => import('@/features/workout/workout-shell').then((c) => c.WorkoutShell),

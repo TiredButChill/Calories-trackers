@@ -3,3 +3,11 @@
 @use './assets/layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './assets/demo/demo.scss';
+
+html.font-sm {
+    font-size: 13px;
+}
+
+html.font-lg {
+    font-size: 16px;
+}
